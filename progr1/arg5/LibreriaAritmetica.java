@@ -64,7 +64,6 @@ public class LibreriaAritmetica {
 
     public static int pot(int b, int e) { //Base, esponente
         int r = 1;
-        int n = e;
 
         while(e > 0) {
             r = per(r, b);
