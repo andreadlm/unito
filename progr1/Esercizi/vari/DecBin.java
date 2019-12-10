@@ -1,6 +1,6 @@
-package vari;
+package Esercizi.vari;
 
-import libs.SIn;
+import Esercizi.libs.SIn;
 import java.util.ArrayList;
 
 class DecBin {
