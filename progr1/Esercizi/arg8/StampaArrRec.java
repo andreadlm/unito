@@ -1,4 +1,4 @@
-package Esercizi.arg8;
+package arg8;
 
 public class StampaArrRec {
     public static void stampaArr(int[] arr) {

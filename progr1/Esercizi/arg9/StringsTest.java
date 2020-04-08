@@ -1,6 +1,6 @@
-package Esercizi.arg9;
+package arg9;
 
-import Esercizi.libs.SIn;
+import libs.SIn;
 
 public class StringsTest {
     public static void main(String[] args) {

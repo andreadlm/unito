@@ -1,7 +1,7 @@
-package Esercizi.arg9;
+package arg9;
 
-import Esercizi.arg7.ArrUtil;
-import Esercizi.libs.SIn;
+import arg7.ArrUtil;
+import libs.SIn;
 
 public class MatrixTest {
     public static void main(String[] args) {

@@ -1,6 +1,6 @@
-package Esercizi.arg7;
+package arg7;
 
-import Esercizi.libs.SIn;
+import libs.SIn;
 
 public class ArrUtil {
     public static int[] initArray() {

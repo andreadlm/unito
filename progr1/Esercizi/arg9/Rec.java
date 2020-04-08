@@ -1,4 +1,4 @@
-package Esercizi.arg9;
+package arg9;
 
 public class Rec {
     public static int indice(int[] arr, int x) {

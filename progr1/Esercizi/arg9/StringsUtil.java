@@ -1,4 +1,4 @@
-package Esercizi.arg9;
+package  arg9;
 
 public class StringsUtil {
     public static boolean stringEquals(String s1, String s2) {

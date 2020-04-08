@@ -1,6 +1,6 @@
-package Esercizi.arg7;
+package arg7;
 
-import Esercizi.libs.SIn;
+import libs.SIn;
 
 class ArrTest {
     public static void main(String[] args) {

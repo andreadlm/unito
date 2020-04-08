@@ -1,6 +1,6 @@
-package Esercizi.vari;
+package vari;
 
-import Esercizi.libs.SIn;
+import libs.SIn;
 
 class Ricorsione {
     public static void main(String[] args) {

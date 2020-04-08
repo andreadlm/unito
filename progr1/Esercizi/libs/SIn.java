@@ -1,4 +1,4 @@
-package Esercizi.libs;
+package libs;
 
 import java.io.*;
 import java.util.*;

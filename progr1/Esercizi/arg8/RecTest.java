@@ -1,7 +1,7 @@
-package Esercizi.arg8;
+package arg8;
 
-import Esercizi.libs.SIn;
-import Esercizi.arg7.ArrUtil;
+import libs.SIn;
+import arg7.ArrUtil;
 
 class RecTest{
     public static void main(String[] args) {
