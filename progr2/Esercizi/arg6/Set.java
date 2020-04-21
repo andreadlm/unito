@@ -10,12 +10,41 @@ public class Set<T> {
     public boolean empty() { return size == 0; }
 
     public void add(T elem) {
-        // In un insieme un elemento può comparire massimo una volta.
-        // Per cui controllo che l'elemento non sia già presente
-        if(!contains(elem)) {
+        if(elem != null && !contains(elem)) {
             first = new Node<T>(elem, first);
             size++;
         }
+    }
+
+    public Set<T> union(Set<T> s) {
+        Set<T> ret = new Set<T>();
+
+        if(s != null)
+            for(Node<T> tmp = s.first; tmp != null; tmp = tmp.getNext()) 
+                ret.add(tmp.getElem());
+        for(Node<T> tmp = this.first; tmp != null; tmp = tmp.getNext()) 
+            ret.add(tmp.getElem());
+
+        return ret;
+    }
+
+    public Set<T> intersection(Set<T> s) {
+        if(s == null) return null;
+
+        Set<T> ret = new Set<T>();
+
+        for(Node<T> tmp = first; tmp != null; tmp = tmp.getNext()) 
+            if(s.contains(tmp.getElem())) ret.add(tmp.getElem());
+
+        return ret;
+    }
+
+    public boolean subsetOf(Set<T> s) {
+        if(s == null) return false;
+
+        for(Node<T> tmp = first; tmp != null; tmp = tmp.getNext())
+            if(!s.contains(tmp.getElem())) return false;
+        return true;
     }
 
     // TODO: da rivedere
@@ -34,30 +63,25 @@ public class Set<T> {
         return false;
     }
 
+    public boolean equals(Set<T> s) {
+        return this.subsetOf(s) && s.subsetOf(this);
+    }
+
     public boolean contains(T elem) {
+        if(elem == null) return false;
+
         for(Node<T> p = first; p != null; p = p.getNext())
             if(p.getElem().equals(elem)) return true;
+            
         return false;
     }
 
     public String toString() {
         String ret = "";
-        int i = 0;
 
         for(Node<T> p = first; p != null; p = p.getNext())
-            ret += "["+ i++ + "|" + p.getElem().toString() + "] -> ";
+            ret += "[" + p.getElem().toString() + "] -> ";
 
-        return ret.substring(0, ret.length() - 3);
-    }
-
-    public static void main(String[] args) {
-        Set<Integer> sInt = new Set<Integer>();
-        sInt.add(3);
-        sInt.add(5);
-        sInt.add(3);
-        sInt.add(6);
-        sInt.remove(3);
-
-        System.out.println(sInt);
+        return ":" + size + ": " + ret.substring(0, ret.length() - 3);
     }
 }

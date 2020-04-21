@@ -1,6 +1,6 @@
 package arg6;
 
-// Classe data per consegna
+// Classe data per consegna, aggiunto metodo equals
 
 // Rappresenta il nome di una persona
 public class Person {
@@ -25,5 +25,14 @@ public class Person {
     @Override
     public String toString(){
         return "<" + this.firstName + "," + this.lastName + ">";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(!(o instanceof Person)) return false;
+
+        Person p = (Person)o;
+        
+        return p.firstName.equals(this.firstName) && p.lastName.equals(this.lastName);
     }
 }
