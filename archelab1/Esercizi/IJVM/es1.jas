@@ -1,0 +1,41 @@
+// if (x == 0)
+//      x = y;
+// else
+//      x = z;
+// y = x + 1;
+
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+x
+y
+z
+.end-var
+0:      bipush 8    // inizializzazione delle variabili
+        istore x
+        bipush 4
+        istore y
+        bipush 2
+        istore z
+        iload x     // if (x == 0)
+        ifeq then
+        iload z     // x = z;
+        istore x
+        goto end
+then:   iload y     // x = y;
+        istore x
+end:    bipush 1    // y = x + 1;
+        iload x
+        iadd
+        istore y
+        halt
+.end-main
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method

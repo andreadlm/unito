@@ -1,0 +1,40 @@
+// x = (x - 2) + y
+// if (x < y)
+//     x = x + y;
+
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+x
+y
+.end-var
+0:      bipush 3    // inizializzazione delle variabili
+        istore x
+        bipush 5
+        istore y
+        iload x     // x = (x - 2) + y;
+        bipush 2
+        isub
+        iload y
+        iadd
+        istore x
+        iload x     // if(x < y)
+        iload y
+        isub
+        iflt then
+        goto end
+then:   iload x     // x = x + y;
+        iload y
+        iadd
+        istore x
+end:   halt
+.end-main
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method
