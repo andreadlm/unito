@@ -1,0 +1,39 @@
+// if(x < 0)
+//     if(y < 0)
+//         return 1
+// return 0
+
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+flag
+.end-var
+        ldc_w objref
+        bipush -1
+        bipush 1
+        invokevirtual alo_lt
+        istore flag
+        halt
+.end-main
+
+.method alo_lt(x, y)
+.var
+.end-var
+        iload x
+        iflt min
+        iload y
+        iflt min
+        bipush 0
+        ireturn
+min:    bipush 1
+        ireturn
+.end-method
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method

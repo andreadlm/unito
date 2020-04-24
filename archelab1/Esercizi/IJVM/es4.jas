@@ -1,0 +1,54 @@
+// result = 0;
+// i = x + 1;
+// while(i < y) {
+//     result += i;
+//     i++;
+// }
+// return result;
+
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+result
+.end-var
+        ldc_w objref
+        bipush 3                  // sommatra(3, 12)
+        bipush 12
+        invokevirtual sommatra    
+        istore result
+        halt
+.end-main
+
+.method sommatra(x, y)
+.var
+i
+result
+.end-var
+        bipush 0         // result = 0
+        istore result
+        bipush 1         // i = x + 1   
+        iload x
+        iadd
+        istore i
+cond:   iload i          // while(i < y)
+        iload y
+        isub
+        iflt go
+        iload result     // return result
+        ireturn
+go:     iload i          // result += i
+        iload result
+        iadd
+        istore result
+        iinc i 1
+        goto cond
+.end-method
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method

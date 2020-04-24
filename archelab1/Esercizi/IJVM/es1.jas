@@ -14,7 +14,7 @@ x
 y
 z
 .end-var
-0:      bipush 8    // inizializzazione delle variabili
+        bipush 8    // inizializzazione delle variabili
         istore x
         bipush 4
         istore y

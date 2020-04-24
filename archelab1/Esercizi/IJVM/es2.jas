@@ -12,7 +12,7 @@ objref  0xCAFE  // may be any value.  Needed by invokevirtual.
 x
 y
 .end-var
-0:      bipush 2    // inizializzazione delle variabili
+        bipush 2    // inizializzazione delle variabili
         istore x
         bipush 6
         istore y
