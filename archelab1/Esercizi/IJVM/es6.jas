@@ -1,0 +1,50 @@
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+value
+.end-var
+        lcd_w objref
+        bipush 34
+        bipush 6
+        pibush 9
+        invokevirtual comp2
+        istore value
+        halt
+.end-main
+
+.method comp2(x, y, k)
+.var
+.end-var
+        iload x      // if(x - 2y + k < 0)
+        iload y
+        dup
+        isub
+        iload k
+        iadd
+        iflt low
+        iload x      // if(x < y)
+        iload y
+        isub
+        iflt rety
+        goto retx
+low:    iload x      // if(x < y)
+        iload y
+        isub
+        iflt retx
+        goto rety
+rety:   iload y      // return y
+        ireturn
+retx:   iload x      // return x
+        ireturn     
+.end-method
+
+
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method

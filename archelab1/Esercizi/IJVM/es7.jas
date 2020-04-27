@@ -1,0 +1,46 @@
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+primo_anno 50
+.end-constant
+
+.main
+.var
+result
+.end-var
+        ldc_w objref
+        bipush 60
+        invokevirtual edizioni_coppa
+        istore result
+        halt
+.end-main
+
+.method edizioni_coppa(anno)
+.var
+count
+anno_p
+.end-var
+        bipush 0             // count = 0
+        istore count
+        iload anno
+        istore anno_p        // anno_p = anno
+cond:   iload anno_p         // while(anno_p > primo_anno)
+        ldc_w primo_anno
+        isub
+        iflt end
+        iinc count 1         // count++
+        iload anno_p         // annop -= 4
+        bipush 4
+        isub
+        istore anno_p
+        goto cond 
+end:    iload count          // return count
+        ireturn
+.end-method
+
+
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method
