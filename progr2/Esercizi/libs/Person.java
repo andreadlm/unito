@@ -1,6 +1,4 @@
-package arg6;
-
-// Classe data per consegna, aggiunto metodo equals
+package libs;
 
 // Rappresenta il nome di una persona
 public class Person {
@@ -27,12 +25,11 @@ public class Person {
         return "<" + this.firstName + "," + this.lastName + ">";
     }
 
+    // confronta l'oggetto con un altro oggetto o
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof Person)) return false;
-
-        Person p = (Person)o;
-        
-        return p.firstName.equals(this.firstName) && p.lastName.equals(this.lastName);
+        if ((o == null) || !(o instanceof Person)) return false;
+        Person p = (Person) o;
+        return (this.firstName.equals(p.firstName)) && (this.lastName.equals(p.lastName));
     }
 }

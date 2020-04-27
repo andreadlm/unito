@@ -1,5 +1,7 @@
 package arg6;
 
+import libs.Node;
+
 // Classe fornita per consegna, modificata
 // con il tipo generico T
 

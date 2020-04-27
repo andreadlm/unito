@@ -1,5 +1,7 @@
 package arg6;
 
+import libs.Node;
+
 public class Set<T> {
 
     private Node<T> first = null;

@@ -1,5 +1,7 @@
 package arg6;
 
+import libs.Person;
+
 public class TestDynamicQueue{
     public static void main(String[] args) {        
         System.out.println("** Integer test **");

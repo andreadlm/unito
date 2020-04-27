@@ -1,4 +1,4 @@
-package arg6;
+package libs;
 
 // Classe fornita per consegna, modificata
 // con il tipo generico T
