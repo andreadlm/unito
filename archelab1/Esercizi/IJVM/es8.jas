@@ -1,0 +1,45 @@
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+res
+.end-var
+        ldc_w objref
+        bipush 5
+        bipush 10
+        invokevirtual minfactor
+        istore res
+        halt
+.end-main
+
+
+.method minfactor(x, y)
+.var
+i
+x_tmp
+.end-var
+        iload x         // x_tmp = x
+        istore x_tmp
+        bipush 1        // i = 1
+        istore i
+cond:   iload y         // while(x_tmp < y)
+        iload x_tmp
+        isub
+        iflt end
+        iload x         // x_tmp += x    
+        iload x_tmp
+        iadd
+        istore x_tmp
+        iinc i 1        // i++
+        goto cond
+end:    iload i         // return i
+        ireturn
+.end-method
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method
