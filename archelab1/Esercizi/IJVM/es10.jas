@@ -1,0 +1,35 @@
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+flag
+.end-var
+        ldc_w objref
+        bipush -1
+        bipush -1
+        invokevirtual both_lt
+        istore flag
+        halt
+.end-main
+
+.method both_lt(x, y)
+.var
+.end-var
+        iload x
+        iflt nxc     // if(x < 0)
+        goto ret0
+nxc:    iload y
+        iflt ret1    // if(y < 0)
+ret0:   bipush 0     // return 0
+        ireturn
+ret1:   bipush 1     // return 1
+        ireturn
+.end-method
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method
