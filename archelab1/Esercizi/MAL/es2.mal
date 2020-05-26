@@ -1,0 +1,4 @@
+subop1    H = MBR
+subop2    MDR = TOS = TOS - H
+subop3    PC = PC + 1; fetch
+subop4    MAR = SP; wr; goto Main1

@@ -1,0 +1,3 @@
+comp21    H = TOS
+comp22    MDR = TOS = -H
+comp23    MAR = SP; wr; goto Main1

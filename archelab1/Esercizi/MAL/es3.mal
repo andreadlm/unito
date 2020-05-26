@@ -1,0 +1,5 @@
+locand1    MAR = H = LV + 1; rd
+locand2    MAR = H + 1; rd
+locand3    H = MDR
+locand4    MDR = TOS = MDR AND H
+locand5    MAR = SP = SP + 1; wr; goto Main1

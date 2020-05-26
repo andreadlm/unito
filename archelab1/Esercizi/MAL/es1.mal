@@ -1,0 +1,3 @@
+dupaquarter1    TOS = TOS >> 1
+dupaquarter2    MDR = TOS = TOS >> 1
+dupaquarter3    MAR = SP = SP + 1; wr; goto Main1

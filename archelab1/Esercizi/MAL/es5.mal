@@ -1,0 +1,4 @@
+sumc1tos1    MAR = CPP; rd
+sumc1tos2    H = TOS
+sumc1tos3    MDR = TOS = H + MDR
+sumc1tos4    MAR = SP; wr; goto Main1
