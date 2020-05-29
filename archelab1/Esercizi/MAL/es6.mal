@@ -1,0 +1,7 @@
+testeq1    H = LV
+testeq2    MAR = H + MBRU; rd
+testeq3    PC = PC + 1; fetch
+testeq4    MAR = SP = SP + 1
+testeq5    Z = MDR; if (Z) goto testeqT; else goto testeqF
+testeqT    MDR = TOS = 1; wr; goto Main1
+testeqF    MDR = TOS = 0; wr; goto Main1

@@ -1,0 +1,7 @@
+maxV1    MAR = H = LV + 1; rd
+maxV2    MAR = H = H + 1; rd
+maxV3    H = MDR
+maxV5    MAR = SP = SP + 1
+maxV4    N = H - MDR; if(N) goto max2; goto max1
+max2     TOS = MDR; wr; goto Main1
+max1     TOS = MDR = H; wr; goto Main1
