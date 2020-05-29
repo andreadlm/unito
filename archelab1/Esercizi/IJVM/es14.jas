@@ -1,0 +1,93 @@
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+result
+.end-var
+        ldc_w objref
+        bipush 5
+        invokevirtual fatt
+        istore result
+        halt
+.end-main
+
+.method fatt(x)
+.var
+.end-var
+        iload x               // if(x == 0) ret0
+        ifeq ret1
+        ldc_w objref          // return x * fatt(x - 1)
+        ldc_w objref
+        iload x
+        bipush 1
+        isub
+        invokevirtual fatt
+        iload x
+        invokevirtual mul
+        ireturn
+ret1:   bipush 1             // return 1
+        ireturn
+.end-method
+
+// Esegue la moltiplicazione x*y
+.method mul(x, y)
+.var
+s
+res
+.end-var
+          bipush 0           // s = 0
+          istore s
+          bipush 0           // res = 0
+          istore res
+          iload x            // if(x < 0) invSx
+          iflt invX
+contY:    iload y            // if(y < 0) invSy
+          iflt invY
+contM:    iload y            // while(y > 0)
+          ifeq end
+          iload res
+          iload x
+          iadd
+          istore res
+          iinc y -1          // y--
+          goto contM
+invX:     bipush 0           // x = 0 - x 
+          iload x
+          isub
+          istore x
+          bipush 1           // s = 1
+          istore s
+          goto contY
+invY:     bipush 0           // y = 0 - y
+          iload y
+          isub
+          istore y
+          bipush 1
+          iload s            //if(s == 1) setS0
+          if_icmpeq setS0
+          goto contM
+setS0:    bipush 0           // s = 0
+          istore s
+          goto contM
+end:      bipush 1           // if(s == 1) cS
+          iload s
+          isub
+          ifeq cS
+ret:      iload res          // return ret
+          ireturn
+cS:       bipush 0           // res = 0 - res
+          iload res
+          isub
+          istore res
+          goto ret
+
+.end-method
+
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method
