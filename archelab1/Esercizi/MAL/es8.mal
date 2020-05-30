@@ -1,0 +1,10 @@
+mul1    H = TOS
+mul2    TOS = 0
+mul3    OPC = MBR
+mul4    Z = OPC; if(Z) goto mul7; else goto mul5
+mul5    MDR = TOS = H + TOS
+mul6    OPC = OPC - 1; goto mul1
+mul7    MAR = SP; wr; goto Main1
+mul8    PC = PC + 1; fetch
+
+
