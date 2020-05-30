@@ -1,0 +1,55 @@
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+result
+.end-var
+        ldc_w objref
+        bipush 3
+        bipush 2
+        invokevirtual accendibit
+        istore result
+.end-main
+
+
+// accende l'y-esimo bit di x
+.method accendibit(x, y)
+.var
+.end-var
+        ldc_w objref
+        iload y
+        invokevirtual pow2
+        iload x
+        ior
+        istore x
+        iload x
+        ireturn   
+.end-method
+
+// restituisce 2^y
+.method pow2(y)
+.var
+res
+.end-var
+        bipush 1
+        istore res
+cyc:    iload y
+        ifeq ret
+        iload res
+        dup
+        iadd
+        istore res
+        iinc y -1
+        goto cyc
+ret:    iload res
+        ireturn
+
+.end-method
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method
