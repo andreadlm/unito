@@ -1,0 +1,32 @@
+.constant
+objref  0xCAFE  // may be any value.  Needed by invokevirtual.
+.end-constant
+
+.main
+.var
+result
+.end-var
+        ldc_w objref
+        bipush 10
+        invokevirtual not
+        istore result
+        halt
+.end-main
+
+
+.method not(x)
+.var
+.end-var
+        bipush 0
+        iload x
+        isub
+        bipush 1
+        isub
+        ireturn
+.end-method
+
+.method foo(y) // da lasciare per problemi di visualizzazione
+.var
+x
+.end-var
+.end-method
