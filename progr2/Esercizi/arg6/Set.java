@@ -46,6 +46,7 @@ public class Set<T> {
 
         for(Node<T> tmp = first; tmp != null; tmp = tmp.getNext())
             if(!s.contains(tmp.getElem())) return false;
+
         return true;
     }
 
@@ -65,8 +66,28 @@ public class Set<T> {
         return false;
     }
 
+    // Metodo wrapper della versione ricorsiva
+    // public void remove(T elem) {
+    //     remove(elem, first);
+    // }
+
+    // Versione ricorsiva
+    private Node<T> remove(T elem, Node<T> node) {
+        if(node != null) {
+            if(node.getElem() == elem) {
+                if(node == first) first = first.getNext();
+                size--;
+                return remove(elem, node.getNext());
+            } 
+
+            node.setNext(remove(elem, node.getNext()));
+        }
+
+        return node;
+    }
+
     public boolean equals(Set<T> s) {
-        return this.subsetOf(s) && s.subsetOf(this);
+        return size() == s.size() && this.subsetOf(s);
     }
 
     public boolean contains(T elem) {
