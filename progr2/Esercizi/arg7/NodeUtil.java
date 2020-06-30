@@ -20,6 +20,7 @@ public class NodeUtil {
         return sameElem(p.getNext(), x);
     }
 
+    // Versione ricorsiva
     public static <T> boolean included(Node<T> p, Node<T> q) {
         if(p == null) return true;
 
@@ -27,6 +28,16 @@ public class NodeUtil {
 
         if(elem != null) return included(p.getNext(), elem);
         else return false;
+    }
+
+    // Versione iterativa
+    public static <T> boolean includedIt(Node<T> p, Node<T> q) {
+        while(p != null && q != null) {
+            while(p.getElem() != q.getElem()) q = q.getNext();
+            p = p.getNext();
+        }
+
+        return p == null ? true : false;
     }
 
     public static <T> void printList(Node<T> p) {
@@ -38,6 +49,7 @@ public class NodeUtil {
         }
     }
 
+    // Versione ricorsiva
     public static <T> Node<T> reverse(Node<T> p) {
         return reverse(p, null);
     }
@@ -47,6 +59,16 @@ public class NodeUtil {
              return reverse(curr.getNext(), new Node<T>(curr.getElem(), prev));
          else
              return new Node<T>(curr.getElem(), prev);
+    }
+
+    // Versione iterativa
+    public static <T> Node<T> reverseIt(Node<T> p) {
+        Node<T> ret = null;
+
+        for(ret = null; p != null; p = p.getNext()) 
+            ret = new Node<T>(p.getElem(), ret);
+
+        return ret;
     }
 
     public static <T> Node<Integer> cardinality(Node<Node<T>> p) {
