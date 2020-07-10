@@ -1,4 +1,4 @@
-package extr1;
+package extr.extr1;
 
 // Classe fornita per consegna, rappresenta una diramazione.
 // Modificata con le implementazioni richieste

@@ -1,4 +1,4 @@
-package extr1;
+package extr.extr1;
 
 // Classe fornita per consegna, modificata con le implementazioni
 // richieste

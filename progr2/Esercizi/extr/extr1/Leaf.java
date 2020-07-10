@@ -1,4 +1,4 @@
-package extr1;
+package extr.extr1;
 
 // Classe fornita per consegna, implementa 
 // la classe Leaf per rappresentare alberi vuoti.
