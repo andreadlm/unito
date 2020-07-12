@@ -49,6 +49,18 @@ class Node {
     public void setNext(Node next) {
         this.next = next; 
     }
+
+    public static void main(String[] args) {
+        List l = new List();
+        l.insertFirst(-2);
+        l.insertFirst(3);
+        l.insertFirst(-5);
+        l.insertFirst(-4);
+        l.insertFirst(7);
+
+        l.neg();
+        l = l;
+    }
 }
 
 class List {
@@ -107,14 +119,15 @@ class List {
         if(n != null) n.setNext(new Node(c, null));
     }
 
-    public void neg() {        
-        while(first != null && first.getElem() < 0) 
-            first = first.getNext();
+    public void neg() {
+        while(first != null && first.getElem() < 0) first = first.getNext();
 
-        Node n = first;
+        Node n = first, p = first;
         while(n != null && n.getNext() != null) {
-            if(n.getNext().getElem() < 0) n.setNext(n.getNext().getNext());
-            n = n.getNext();
+            if(n.getNext().getElem() < 0) {
+                n = n.getNext();
+                p.setNext(n.getNext());
+            } else n = p = n.getNext();
         }
     }
 }
