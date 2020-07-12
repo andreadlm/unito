@@ -1,30 +1,5 @@
 package extr.extr2;
 
-/* 
- * Implementare un metodo 'modifica' che aggiunge in fondo a una
- * lista la somma di tutti gli elementi positivi della lista.
- *
- * Ecco alcuni esempi di liste prima e dopo l'esecuzione del metodo:
- *
- * prima :
- * dopo  : 0
- *
- * prima : 5
- * dopo  : 5, 5
- *
- * prima : 5, -3, 1
- * dopo  : 5, -3, 1, 6
- *
- * prima : -1, -1, -6
- * dopo  : -1, -1, -6, 0
- *
- * NON E` CONSENTITO:
- * - usare break o continue all'interno di cicli
- * - usare strutture dati ausiliarie (ad esempio array)
- * - modificare il codice al di fuori dal metodo da implementare
- *
- */
-
 class Node {
     private int elem;
     private Node next;
@@ -49,17 +24,17 @@ class Node {
     public void setNext(Node next) {
         this.next = next; 
     }
+    
+    public Node neg() {
+        if(next == null) return elem < 0 ? null : this;
+        if(elem < 0) return next.neg();
+        else next = next.neg(); return this;
+    }
 
-    public static void main(String[] args) {
-        List l = new List();
-        l.insertFirst(-2);
-        l.insertFirst(3);
-        l.insertFirst(-5);
-        l.insertFirst(-4);
-        l.insertFirst(7);
 
-        l.neg();
-        l = l;
+    public Node inv(Node p, Node q) {
+        if(p == null) return q;
+        return inv(p.next, new Node(p.elem, q));
     }
 }
 
