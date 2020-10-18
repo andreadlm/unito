@@ -1,5 +1,4 @@
-#ifndef ESERCIZI_ES04_BINARY_PRINT_H
-#define ESERCIZI_ES04_BINARY_PRINT_H
+#include <stdio.h>
 
 void binary_print(unsigned int n)
 {
@@ -15,5 +14,3 @@ void binary_print(unsigned int n)
     for(int i = 0; i < bit_num; mask >>= 1u, i++)
         printf("%d ", (n & mask) == 0 ? 0 : 1);
 }
-
-#endif //ESERCIZI_ES04_BINARY_PRINT_H

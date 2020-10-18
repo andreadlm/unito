@@ -1,5 +1,4 @@
-#ifndef ESERCIZI_ES01_PRINT_AFTER_H
-#define ESERCIZI_ES01_PRINT_AFTER_H
+#include <string.h>
 
 char* print_after(char* s1, char* s2)
 {
@@ -13,5 +12,3 @@ char* print_after(char* s1, char* s2)
     if(p == strlen(s2)) return &s1[i];
     return "";
 }
-
-#endif //ESERCIZI_ES01_PRINT_AFTER_H

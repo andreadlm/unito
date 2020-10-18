@@ -1,6 +1,3 @@
-#ifndef ESERCIZI_ES03_IEE754_EXP_H
-#define ESERCIZI_ES03_IEE754_EXP_H
-
 int iee754_exp(double* d)
 {
     unsigned short s = ((unsigned short*)d)[3];
@@ -11,5 +8,3 @@ int iee754_exp(double* d)
 
     return s;
 }
-
-#endif //ESERCIZI_ES03_IEE754_EXP_H

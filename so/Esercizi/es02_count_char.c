@@ -1,5 +1,4 @@
-#ifndef ESERCIZI_ES02_COUNT_CHAR_H
-#define ESERCIZI_ES02_COUNT_CHAR_H
+#include <string.h>
 
 // ! parameters controls missing !
 void count_char(char s[], char cs[], int ns[])
@@ -10,5 +9,3 @@ void count_char(char s[], char cs[], int ns[])
         cs[j] = s[i]; ns[j]++;
     }
 }
-
-#endif //ESERCIZI_ES02_COUNT_CHAR_H
