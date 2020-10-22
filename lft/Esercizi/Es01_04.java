@@ -94,8 +94,6 @@ public class Es01_04 {
             }
         }
 
-        for()
-
         return state == 3 || state == 7;
     }
 
