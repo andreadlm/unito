@@ -43,6 +43,5 @@ void file_revert(char* path_f_r, char* path_f_w)
 
     close(f_r);
     close(f_w);
-    //aaa
 #endif
 }
