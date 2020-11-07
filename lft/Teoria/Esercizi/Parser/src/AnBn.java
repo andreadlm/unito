@@ -1,11 +1,6 @@
 // La classe implementa un parser per riconoscere le stringhe
-// nel formato wcw^r.
-// Esempi di stringhe riconosciute: 00c00, 01c10, 001001c100100
-
-// Insiemi guida:
-// GUIDA(S -> c) = {c}
-// GUIDA(S -> 0S0) = {0}
-// GUIDA(S -> 1S1) = {1}
+// nel formato AnBn.
+// Esempi di stringhe riconosciute: aaabbb, ab, eps
 
 public class AnBn extends Parser {
     @Override
