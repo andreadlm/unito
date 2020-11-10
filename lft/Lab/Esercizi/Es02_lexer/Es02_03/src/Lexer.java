@@ -14,9 +14,65 @@ public class Lexer {
     }
 
     public Token lexical_scan(BufferedReader br) throws LexerException {
-        while (peek == ' ' || peek == '\t' || peek == '\n'  || peek == '\r') {
-            if (peek == '\n') line++;
-            readch(br);
+        // TODO: un miglioramento potrebbe essere incrementare line una sola volta nel primo if
+        while(peek == ' ' || peek == '\t' || peek == '\n' || peek == '\r' || peek == '/') {
+            if(peek == '/') {
+                // Caso '/': lo '/' va trattato separatamente dagli altri caratteri
+                // per via del fatto che può assumere significati multipli, tra cui
+                // essere l'inzio di una stringa di commento
+                readch(br);
+                if(peek == '/') {
+                    // Caso commento su singola linea: un commento su singola linea è
+                    // definito come una sequenza di caratteri che inizia con // e
+                    // termina con CR/LF.
+                    // Ogni carattere di qui alla fine della riga viene ignorato
+                    do { readch(br); } while (peek != '\n');
+                } else if(peek == '*') {
+                    // Caso commento multilinea: un commento multilinea è definito come
+                    // una sequenza di caratteri che inizia con /* e temina con */
+                    // Il riconoscimento del termine del commento viene eseguito attraverso
+                    // un semplice DFA dotato di 3 stati (0, 1 e lo stato finale 2)
+                    int state = 0;
+                    do {
+                        readch(br);
+                        switch(state) {
+                            case 0:
+                                if(peek == '*') state = 1;
+                                if(peek == '\n') line++;
+                                break;
+
+                            case 1:
+                                if(peek == '/') state = 2;
+                                else if(peek != '*') {
+                                    state = 0;
+                                    if(peek == '\n') line++;
+                                }
+                                break;
+                        }
+                        // La condizione di uscita dal DFA è il raggiungimento dello stato
+                        // 2, rappresentate la fine del commento (una sequenza */ è stata
+                        // identificata
+                    } while(state != 2 && peek != (char)-1);
+                    // TODO: scrivere la condizione EOF come parte del DFA
+                    // Ogni commento deve essere chiuso prima della fine del file da specifiche
+                    // di implementazione
+                    if(peek == (char)-1)
+                        throw new LexerException("Comment not closed before the end of the file");
+                    // Forzo il programma a leggere il prossimo carattere, in modo tale
+                    // che l'ultimo carattere letto (lo '/' a chiusura del commento)
+                    // non venga valutato all'inzio della prossima iterazione del while
+                    peek = ' ';
+                } else {
+                    // Il carattere '/' non è seguito da nessun carattere che ne permetta
+                    // l'identificazione come commento.
+                    // Viene restituito un token che rappresenza l'operatore di divisone
+                    return Token.div;
+                }
+            } else {
+                // Caso caratteri senza significato (spazio, TAB, LF, CR)
+                if(peek == '\n') line++;
+                readch(br);
+            }
         }
 
         switch (peek) {
@@ -48,10 +104,6 @@ public class Lexer {
                 peek = ' ';
                 return Token.mult;
 
-            case '/':
-                peek = ' ';
-                return Token.div;
-
             case '(':
                 peek = ' ';
                 return Token.lpt;
@@ -66,7 +118,7 @@ public class Lexer {
                     peek = ' ';
                     return Word.and;
                 } else {
-                    throw new LexerException("erroneous character, & can't be followed by " + peek);
+                    throw new LexerException("& is not an operator");
                 }
 
             case '|':
@@ -75,7 +127,7 @@ public class Lexer {
                     peek = ' ';
                     return Word.or;
                 } else {
-                    throw new LexerException("erroneous character, | can't be followed by " + peek);
+                    throw new LexerException("| is not an operator ");
                 }
 
             case '>':
@@ -112,12 +164,22 @@ public class Lexer {
                 return new Token(Tag.EOF);
 
             default:
-                if (Character.isLetter(peek)) {
+                if (Character.isLetter(peek) || peek == '_') {
                     StringBuilder buf = new StringBuilder();
-                    do {
+
+                    while(peek == '_') {
                         buf.append(peek);
                         readch(br);
-                    } while(Character.isLetter(peek) || Character.isDigit(peek));
+                    }
+
+                    if(Character.isLetter(peek) || Character.isDigit(peek)) {
+                        do {
+                            buf.append(peek);
+                            readch(br);
+                        } while(Character.isLetter(peek) || Character.isDigit(peek) || peek == '_');
+                    } else {
+                        throw new LexerException("erroneous sequence for an identifier: _ must be followed by a letter or a digit");
+                    }
 
                     String s = buf.toString();
 
@@ -155,29 +217,27 @@ public class Lexer {
 
                 } else if (Character.isDigit(peek)) {
                     if(peek == '0') {
-                        readch(br);
-                        if(Character.isDigit(peek))
-                            throw new LexerException("erroneous character, 0 can't be followed by " + peek);
-                        else return new NumberTok(0);
+                        peek = ' ';
+                        return new NumberTok(0);
                     } else {
-                        int num = 0, exp = 1;
+                        int num = 0;
 
                         do {
-                            num += (peek - '0') * exp;
-                            exp *= 10;
+                            num = num * 10 + (peek - '0');
                             readch(br);
                         }while(Character.isDigit(peek));
 
                         return new NumberTok(num);
                     }
-                } else
+                } else{
                     throw new LexerException("erroneous character, " + peek + " not recognised");
+                }
         }
     }
 
     public static void main(String[] args) {
         Lexer lex = new Lexer();
-        String path = "C:\\Users\\Andrea\\Documents\\unito\\lft\\Esercizi\\Es02_lexer\\src\\lex_test.txt"; // il percorso del file da leggere
+        String path = "C:\\Users\\Andrea\\Documents\\unito\\lft\\Lab\\Esercizi\\Es02_lexer\\Es02_03\\src\\lex_test.txt"; // il percorso del file da leggere
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
@@ -195,5 +255,4 @@ public class Lexer {
             System.err.println(le.toString());
         }
     }
-
 }
