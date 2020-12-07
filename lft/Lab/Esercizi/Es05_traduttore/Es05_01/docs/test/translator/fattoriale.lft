@@ -1,0 +1,12 @@
+// Autore: esempio fornito
+// Il programma calcola il fattoriale di un numero
+// ricevuto in input
+
+read(n);
+= i 2;
+= f 1;
+while (<= i n){
+	= f *(f i);
+	= i +(i 1)
+};
+print(f)

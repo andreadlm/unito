@@ -1,0 +1,24 @@
+// Autore: Andrea Delmastro
+// mele.lft
+// Il programma accetta in input:
+// 1) una quantità di mele da acquistare
+// 2) il prezzo unitario si ogni mela
+// Se la quantità è maggiore di 10 applica uno sconto del 20%
+// Stampa il prezzo totale
+// L'operazione viene ripetuta 3 volte
+// input:
+// 15 -> numero mele
+// 3 -> prezzo unitario
+// output:
+// 36
+
+= i 3;
+while(> i 0) {
+    read(q_mele);
+    read(p_unit_mela);
+    = p_tot *(q_mele p_unit_mela);
+    cond when(> q_mele 10) do = p_tot - p_tot / *(p_tot 20) 100
+         else = p_tot p_tot; // Necessario
+    print(p_tot);
+    = i - i 1
+}

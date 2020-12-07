@@ -1,0 +1,11 @@
+// Autore: esempio fornito
+// Il programma calcola il maggioire di 3 numeri
+
+read(x);
+read(y);
+read(z);
+cond
+	when (> x y) do
+		cond when (> x z) do print(x) else print(z)
+	else
+		cond when (> y z) do print(y) else print(z)

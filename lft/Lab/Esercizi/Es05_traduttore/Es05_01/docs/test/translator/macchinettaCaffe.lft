@@ -1,0 +1,16 @@
+// Autore: Andrea Delmastro
+// Il programma riceve in input un prezzo intero e una successione di monete da
+// 10, 20, 50 centesimi, terminando quando il prezzo è stato raggiunto. Monete
+// di altri tagli non vengono accettate e vengono "restituite" in output
+
+read(prezzo);
+= prezzo *(prezzo 100);
+= somma 0;
+while(< somma prezzo) {
+    read(moneta);
+    cond
+        when (== moneta 10) do = somma +(somma moneta)
+        when (== moneta 20) do = somma +(somma moneta)
+        when (== moneta 50) do = somma +(somma moneta)
+        else print(moneta)
+}
