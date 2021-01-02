@@ -9,8 +9,8 @@ read(prezzo);
 while(< somma prezzo) {
     read(moneta);
     cond
-        when (== moneta 10) do = somma +(somma moneta)
-        when (== moneta 20) do = somma +(somma moneta)
-        when (== moneta 50) do = somma +(somma moneta)
+        when (== moneta 10) do { = somma +(somma moneta); print(1) }
+        when (== moneta 20) do { = somma +(somma moneta); print(1) }
+        when (== moneta 50) do { = somma +(somma moneta); print(1) }
         else print(moneta)
 }

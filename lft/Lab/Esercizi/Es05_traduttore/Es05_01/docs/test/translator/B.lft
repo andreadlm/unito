@@ -1,0 +1,8 @@
+// Autore: esempio fornito
+// Il programma stampa 610 calcolando 10 + 20 * 30
+
+= x 10;
+= y 20;
+= z 30;
+print
+(+(x *(y z)))

@@ -82,7 +82,7 @@ public class Translator {
                     match(Tag.ID);
                     expr();
                     code.emit(OpCode.istore, id_addr);
-                    code.emit(OpCode.GOto, stat_next);
+                    code.emit(OpCode.GOto, stat_next); //TODO: necessario?
                 } else {
                     throw new ParserException("stat", lex.line);
                 }
@@ -113,7 +113,7 @@ public class Translator {
                     code.emit(OpCode.invokestatic,0);
                     code.emit(OpCode.istore,id_addr);
                     // Goto alla prossima linea di codice
-                    code.emit(OpCode.GOto, stat_next); // TODO: necessario
+                    code.emit(OpCode.GOto, stat_next); // TODO: necessario?
                 } else {
                     throw new ParserException("stat", lex.line);
                 }
@@ -320,10 +320,13 @@ public class Translator {
     }
 
     // TODO: rivedere il main
+    /**
+     * @author Andrea Delmastro
+     * @param args riceve come parametro il percorso del file da tradurre
+     */
     public static void main(String[] args) {
         Lexer lex = new Lexer();
         String path = args[0];
-        //String path = "C:\\Users\\Andrea\\Documents\\unito\\lft\\Lab\\Esercizi\\Es05_traduttore\\Es05_01\\docs\\test\\translator\\fattoriale.lft"; // il percorso del file da leggere
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Translator translator = new Translator(lex, br);
