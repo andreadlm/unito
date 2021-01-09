@@ -1,0 +1,14 @@
+// indovinaNumero.lft
+// Il programma ti propone un numero (hardcoded) che devi indovinare
+// tramite tentativi successivi. Ad ogni iterazione inserisci un
+// numero. Se è maggiore del numero da indovinare il programma stampa
+// 1, altrimenti stampa 0. Il programma termina quando hai indovinato
+// il numero. Al termine il numero indovinato viene stampato
+= num 47;
+read(guess);
+while(<> num guess) {
+    cond when(> guess num) do print(1)
+         else print(0);
+    read(guess)
+};
+print(num)

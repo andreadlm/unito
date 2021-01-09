@@ -1,0 +1,7 @@
+// Autore: Andrea Delmastro
+// Semplice test per le espressioni che contengono operatori booleani
+
+read(a);
+read(b);
+cond when(&& !== a 0 >= b 0) do print(1)
+     else print(2)

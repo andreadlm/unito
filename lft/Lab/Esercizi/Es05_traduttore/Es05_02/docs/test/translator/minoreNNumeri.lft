@@ -1,0 +1,13 @@
+// Autore: Andrea Delmastro
+// minoreNNumeri.lft
+// Il programma accetta n numeri (fino a che non viene inserito
+// 0) e determina il minore
+
+= min 10000; // Ipotetico numero più grande utilizzabile
+read(tmp);
+while(<> tmp 0) {
+    cond when(< tmp min) do = min tmp
+         else = min min;
+    read(tmp)
+};
+print(min)

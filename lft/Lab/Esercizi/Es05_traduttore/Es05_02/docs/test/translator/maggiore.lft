@@ -1,0 +1,10 @@
+// Autore: Andrea Delmastro
+// maggiore.lft
+// Il programma legge due numeri e stampa il maggiore
+// Se i due numeri sono uguali, li stampa entrambi
+
+read(x);
+read(y);
+cond when(> x y) do print(x)
+     when(> y x) do print(y)
+     else print(x y)

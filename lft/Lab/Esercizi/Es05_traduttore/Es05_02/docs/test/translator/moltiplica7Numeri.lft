@@ -1,0 +1,12 @@
+// Autore: Andrea Delmastro
+// Il programma moltiplica sette numeri. La soluzione ottimale da parte
+// del compilatore è riuscire ad occupare meno stack possibile
+
+read(n1);
+read(n2);
+read(n3);
+read(n4);
+read(n5);
+read(n6);
+read(n7);
+print(*(n1 n2 n3 n4 n5 n6 n7))

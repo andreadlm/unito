@@ -1,0 +1,14 @@
+// Autore: Andrea Delmastro
+// fibonacci.lft
+// Il programma calcola i primi l numeri di Fibonacci
+
+read(l);
+= n1 1;
+= n2 1;
+while(> l 0) {
+    print(n1);
+    = tmp n2;
+    = n2 +(n1 n2);
+    = n1 tmp;
+    = l - l 1
+}

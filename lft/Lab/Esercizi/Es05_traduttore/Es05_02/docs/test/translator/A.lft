@@ -1,0 +1,5 @@
+// Autore: esempio fornito
+// Il programma stampa 1 sommato al numero ricevuto in input
+
+read(a);
+print(+(a 1))
