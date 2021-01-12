@@ -1,5 +1,9 @@
 import java.io.*;
 
+/**
+ * @author Andrea Delmastro
+ * La classe permette la traduzione di un programma lft in codice java
+ */
 public class Translator {
     private final Lexer lex;
     private final BufferedReader pbr;
@@ -26,10 +30,22 @@ public class Translator {
         } else throw new ParserException("Syntax error", null, lex.line);
     }
 
+    /**
+     * @author Andrea Delmastro
+     * @throws ParserException errore in fase di analisi sintattica
+     * @throws LexerException errore in fase di analisi lessicale
+     */
     public void prog() throws ParserException, LexerException {
-        int lnext_prog = code.newLabel();
-        statlist(lnext_prog);
-        code.emitLabel(lnext_prog);
+        // <prog> -> <statlist>EOF
+        // Etichetta a cui saltare al termine dell'esecuzione del programma
+        // L'etichetta è necessaria poichè la procedura statlist() richiede
+        // come attributo ereditato l'etichetta a cui saltare al temine
+        // dell'esecuzione di tutti gli statement
+        int lNextProg = code.newLabel();
+        // La lista di statement dovrà eseguire tutte le istruzioni e poi
+        // saltare al termine del programmma
+        statlist(lNextProg);
+        code.emitLabel(lNextProg);
         match(Tag.EOF);
         try {
             code.toJasmin();
@@ -39,107 +55,132 @@ public class Translator {
         }
     }
 
-    private void statlist(int statlist_next) throws ParserException, LexerException {
+    /**
+     * @author Andrea Delmastro
+     * @param next etichetta a cui saltare al termine dell'esecuzione di tutti
+     *             gli statement
+     * @throws ParserException errore in fase di analisi sintattica
+     * @throws LexerException errore in fase di analisi lessicale
+     */
+    private void statlist(int next) throws ParserException, LexerException {
         if(look.tag == '=' || look.tag == Tag.PRINT || look.tag == Tag.COND ||
            look.tag == Tag.READ || look.tag == Tag.WHILE || look.tag == '{') {
-            int lnext_stat = code.newLabel();
-            stat(lnext_stat);
-            code.emitLabel(lnext_stat);
-            statlistp(statlist_next);
+            // <statlist> -> <stat><statlistp>
+            // Etichetta associata all'inzio del prossimo statement nella lista
+            int lNextStat = code.newLabel();
+            stat(lNextStat);
+            code.emitLabel(lNextStat);
+            statlistp(next);
         } else {
             throw new ParserException("statlist", lex.line);
         }
     }
 
-    void statlistp(int statlistp_next) throws ParserException, LexerException {
+    /**
+     * @author Andrea Delmastro
+     * @param next etichetta a cui saltare al termine dell'esecuzione di tutti gli
+     *             statement
+     */
+    void statlistp(int next) throws ParserException, LexerException {
         if(look.tag == ';') {
+            // <statlistp> -> <stat><statlistp>
             match(';');
-            int lnext_stat = code.newLabel();
-            stat(lnext_stat);
-            code.emitLabel(lnext_stat);
-            statlistp(statlistp_next);
+            // Etichetta associata all'inzio del prossimo statement nella lista
+            int lNextStat = code.newLabel();
+            stat(lNextStat);
+            code.emitLabel(lNextStat);
+            statlistp(next);
         } else if (look.tag == Tag.EOF || look.tag == '}') {
-            code.emit(OpCode.GOto, statlistp_next);
+            // <statlistp> -> eps
+            // Termine dell'esecuzione di tutti gli statement, salto all'etichetta
+            // associata alla prossima istruzione
+            code.emit(OpCode.GOto, next);
         } else {
             throw new ParserException("statlistp", lex.line);
         }
     }
 
-    void stat(int stat_next) throws ParserException, LexerException {
+    /**
+     * @author Andrea Delmastro
+     * @param next etichetta a cui saltare dopo aver eseguito lo statement
+     * @throws ParserException errore in fase di analisi sintattica
+     * @throws LexerException errore in fase di analisi lessicale
+     */
+    void stat(int next) throws ParserException, LexerException {
         switch(look.tag) {
             case '=' -> {
-                // Assegnamento di una variabile
-                // Esempio: = x + 10 7 -> assegna a x 17
+                // <stat> -> =ID<expr>
                 match('=');
                 if(look.tag == Tag.ID) {
                     // Ricerca dell'indice corrispondente alla variabile
-                    int id_addr = st.lookupAddress(((Word)look).lexeme);
-                    if(id_addr == -1) {
+                    int idAddr = st.lookupAddress(((Word)look).lexeme);
+                    if(idAddr == -1) {
                         // La variabile non è mai stata utilizzata, viene creata
-                        id_addr = count;
+                        idAddr = count;
                         st.insert(((Word)look).lexeme, count++);
                     }
                     match(Tag.ID);
                     expr();
-                    code.emit(OpCode.istore, id_addr);
-                    code.emit(OpCode.GOto, stat_next); //TODO: necessario?
+                    code.emit(OpCode.istore, idAddr);
+                    code.emit(OpCode.GOto, next);
                 } else {
                     throw new ParserException("stat", lex.line);
                 }
             }
             case Tag.PRINT -> {
-                // Stampa di una lista di espressioni
+                // <stat> -> print(<exprlist>)
                 match(Tag.PRINT);
                 match('(');
                 exprlist(OpCode.invokestatic);
                 match(')');
-                // Per ogni espressione di exprlist eseguo una stampa
-                // Goto alla prossima linea di codice
-                code.emit(OpCode.GOto, stat_next); // TODO: necessario?
+                code.emit(OpCode.GOto, next);
             }
             case Tag.READ -> {
-                // Lettura di una variabile
-                // Esempio: read 
+                // <stat> -> read(ID)
                 match(Tag.READ);
                 match('(');
                 if(look.tag == Tag.ID) {
-                    int id_addr = st.lookupAddress(((Word)look).lexeme);
-                    if (id_addr==-1) {
-                        id_addr = count;
+                    // Ricerca dell'indice corrispondente alla variabile
+                    int idAddr = st.lookupAddress(((Word)look).lexeme);
+                    if (idAddr==-1) {
+                        // La variabile non è mai stata utilizzata, viene creata
+                        idAddr = count;
                         st.insert(((Word)look).lexeme,count++);
                     }
                     match(Tag.ID);
                     match(')');
                     code.emit(OpCode.invokestatic,0);
-                    code.emit(OpCode.istore,id_addr);
-                    // Goto alla prossima linea di codice
-                    code.emit(OpCode.GOto, stat_next); // TODO: necessario?
+                    code.emit(OpCode.istore,idAddr);
+                    code.emit(OpCode.GOto, next);
                 } else {
                     throw new ParserException("stat", lex.line);
                 }
             }
             case Tag.COND -> {
+                // <stat> -> cond<whenlist>else<stat>
                 int elseLabel = code.newLabel();
                 match(Tag.COND);
-                whenlist(stat_next, elseLabel);
+                whenlist(next, elseLabel);
                 match(Tag.ELSE);
-                code.emit(OpCode.label, elseLabel); //TODO: necessario?
-                stat(stat_next);
+                code.emit(OpCode.label, elseLabel);
+                stat(next);
             }
             case Tag.WHILE -> {
+                // <stat> -> while(<bexpr>)<stat>
                 int stat1_next = code.newLabel();
                 int bexpr_if_true = code.newLabel();
                 match(Tag.WHILE);
                 match('(');
                 code.emit(OpCode.label, stat1_next);
-                bexpr(bexpr_if_true, stat_next);
+                bexpr(bexpr_if_true, next);
                 code.emit(OpCode.label, bexpr_if_true);
                 match(')');
                 stat(stat1_next);
             }
             case '{' -> {
+                // <stat> -> {<statlist>}
                 match('{');
-                statlist(stat_next);
+                statlist(next);
                 match('}');
             }
             default -> throw new ParserException("stat", lex.line);
@@ -148,62 +189,52 @@ public class Translator {
 
     /**
      * @author Andrea Delmastro
-     * @param ifFound etichetta a cui saltare se una condizione risulta vera dopo averne eseguito il corpo.
+     * @param ifFound etichetta a cui saltare se una condizione risulta vera dopo averne eseguito il corpo
      * @param ifNFound etichetta a cui saltare se nessuna condizione risultasse vera (etichetta corrispondente
-     * all'inizio del blocco else).
+     * all'inizio del blocco else)
      * @throws ParserException errore in fase di analisi sintattica
      * @throws LexerException errore in fase di analisi lessicale
      */
     void whenlist(int ifFound, int ifNFound) throws ParserException, LexerException {
         if (look.tag == Tag.WHEN) {
-            /* Etichetta relativa al prossimo blocco condizonale when a cui saltare nel caso in
-             * cui questa condizione risultasse falsa */
+            // <whenlist> -> <whenitem><whenlistp>
+            // Etichetta relativa al prossimo blocco condizonale when a cui saltare nel caso in
+            // cui questa condizione risultasse falsa
             int nextWhenLbl = code.newLabel();
-            /* Il prossimo blocco salta al successivo blocco when se la condizione è falsa (ci sarà sempre
-             * un successivo blocco, nel caso di blocco vuoto conterrà goto, salta a ifFound se la condizione
-             * è vera */
             whenitem(ifFound, nextWhenLbl);
-            /* Emissione dell'etichetta relativa al prossimo blocco when */
+            // Emissione dell'etichetta relativa al prossimo blocco when
             code.emit(OpCode.label, nextWhenLbl);
-            /* Se si è raggiunta la clausola ELSE, significa che non ci sono più condizioni da valutare. Viene
-             * effettuato un salto verso la porzione di codice contenente le operazioni da eseguire in caso di
-             * else. */
             whenlistp(ifFound, ifNFound);
         } else {
-            /* Errore di parsificazione */
             throw new ParserException("whenlist", lex.line);
         }
     }
 
     /**
      * @author Andrea Delmastro.
-     * @param ifFound etichetta a cui saltare se una condizione risulta vera dopo averne eseguito il corpo.
+     * @param ifFound etichetta a cui saltare se una condizione risulta vera dopo averne eseguito il corpo
      * @param ifNFound etichetta a cui saltare se nessuna condizione risulta vera (etichetta corrispondente
-     * all'inizio del blocco else).
+     * all'inizio del blocco else)
      * @throws ParserException errore in fase di analisi sintattica
      * @throws LexerException errore in fase di analisi lessicale
      */
     void whenlistp(int ifFound, int ifNFound) throws ParserException, LexerException {
         if (look.tag == Tag.WHEN) {
-            /* Etichetta relativa al prossimo blocco condizonale when a cui saltare nel caso in
-             * cui questa condizione risultasse falsa */
+            // <whenlistp> -> <whenitem><whenlistp>
+            // Etichetta relativa al prossimo blocco condizonale when a cui saltare nel caso in
+            // cui questa condizione risultasse falsa
             int nextWhenLbl = code.newLabel();
-            /* Il prossimo blocco salta al successivo blocco when se la condizione è falsa (ci sarà sempre
-             * un successivo blocco, nel caso di blocco vuoto conterrà goto, salta a ifFound se la condizione
-             * è vera */
             whenitem(ifFound, nextWhenLbl);
-            /* Emissione dell'etichetta relativa al prossimo blocco when */
+            // Emissione dell'etichetta relativa al prossimo blocco when
             code.emit(OpCode.label, nextWhenLbl);
-            /* Questo blocco salta al successivo blocco when se la condizione è falsa, salta a ifNoOneFound
-             * se nessuna condizione risulta vera. */
             whenlistp(ifFound, ifNFound);
         } else if (look.tag == Tag.ELSE) {
-            /* Se si è raggiunta la clausola ELSE, significa che non ci sono più condizioni da valutare. Viene
-             * effettuato un salto verso la porzione di codice contenente le operazioni da eseguire in caso di
-             * else. */
+            // <whenlistp> -> eps
+            // Se si è raggiunta la clausola ELSE, significa che non ci sono più condizioni da valutare. Viene
+            // effettuato un salto verso la porzione di codice contenente le operazioni da eseguire in caso di
+            // else
             code.emit(OpCode.GOto, ifNFound);
         } else {
-            /* Errore di parsificazione */
             throw new ParserException("whenlistp", lex.line);
         }
     }
@@ -211,82 +242,110 @@ public class Translator {
     /**
      * @author Andrea Delmastro.
      * @param ifTrue etichetta a cui saltare se la condizione risulta vera dopo averne eseguito il corpo (etichetta
-     * corrispondente al termine della condizione).
+     * corrispondente al termine della condizione)
      * @param ifFalse etichetta a cui saltare se la condizione risulta falsa (etichetta corrispondente al prossimo
-     * blocco when).
+     * blocco when)
+     * @throws ParserException errore in fase di analisi sintattica
+     * @throws LexerException errore in fase di analisi lessicale
      */
     void whenitem(int ifTrue, int ifFalse) throws ParserException, LexerException {
         if (look.tag == Tag.WHEN) {
+            // <whenitem> -> when(<bexpr>)do<stat>
             match(Tag.WHEN);
             match('(');
-            /* Etichetta relativa alla porzione di codice che contiene le istruzioni da eseguire nel caso
-             * la condizione risultasse vera. */
+            // Etichetta relativa alla porzione di codice che contiene le istruzioni da eseguire nel caso
+            // la condizione risultasse vera
             int statLabel = code.newLabel();
-            /* Se la condizione è vera, salta all'etichetta appena creata, altrimenti salta a ifFalse */
             bexpr(statLabel, ifFalse);
             match(')');
             match(Tag.DO);
-            /* Emissione dell'etichetta relativa alla porzione di codice che contiene le istruzioni da
-             * eseguire nel caso la condizione risultasse vera */
+            // Emissione dell'etichetta relativa alla porzione di codice che contiene le istruzioni da
+            // eseguire nel caso la condizione risultasse vera
             code.emit(OpCode.label, statLabel);
-            /* La prossima istruzione eseguirà e salterà a ifTrue */
             stat(ifTrue);
         } else {
             throw new ParserException("whenitem", lex.line);
         }
     }
 
+    /**
+     * @author Andrea Delmastro
+     * @throws ParserException errore in fase di analisi sintattica
+     * @throws LexerException errore in fase di analisi lessicale
+     */
     void expr() throws ParserException, LexerException {
         switch(look.tag) {
             case '+' -> {
+                // <expr> -> +(<exprlist>)
                 match('+');
                 match('(');
                 exprlist(OpCode.iadd);
                 match(')');
             }
             case '*' -> {
+                // <expr> -> *(<exprlist>)
                 match('*');
                 match('(');
                 exprlist(OpCode.imul);
                 match(')');
             }
             case '-' -> {
+                // <expr> -> - <expr><expr>
                 match('-');
                 expr();
                 expr();
                 code.emit(OpCode.isub);
             }
             case '/' -> {
+                // <expr> -> /<expr><expr>
                 match('/');
                 expr();
                 expr();
                 code.emit(OpCode.idiv);
             }
             case Tag.NUM -> {
+                // <expr> -> NUM
                 NumberTok numTok = (NumberTok)look;
                 match(Tag.NUM);
                 code.emit(OpCode.ldc, numTok.lexeme);
             }
             case Tag.ID -> {
+                // <expr> -> ID
                 Word word = (Word)look;
                 match(Tag.ID);
                 // Ricerca dell'indice corrispondente alla variabile
-                int id_addr = st.lookupAddress(word.lexeme);
-                if(id_addr == -1) {
+                int idAddr = st.lookupAddress(word.lexeme);
+                if(idAddr == -1) {
                     // La variabile non è mai stata utilizzata, viene creata
-                    id_addr = count;
+                    idAddr = count;
                     st.insert(((Word)look).lexeme, count++);
                 }
-                code.emit(OpCode.iload, id_addr);
+                code.emit(OpCode.iload, idAddr);
             }
             default -> throw new ParserException("expr", lex.line);
         }
     }
 
+    /**
+     * @author Andrea Delmastro
+     * @param opc opcode da emettere. La procedura exprlist() può essere richiamata inzialmente
+     *            dalla procedura stat() nel caso di stat -> print(exprlist) oppure dalla
+     *            procedura expr() nei casi expr -> +(explist) e expr -> *(exprlist). Il risultato
+     *            atteso da exprlist varia a seconda del contesto dove viene invocata. Il parametro
+     *            opCode serve per discriminare sulla base del contesto di invocazione
+     * @see #stat(int)
+     * @see #expr()
+     * @throws ParserException errore in fase di analisi sintattica
+     * @throws LexerException errore in fase di analisi lessicale
+     */
     private void exprlist(OpCode opc) throws ParserException, LexerException {
         if(look.tag == '+' || look.tag == '-' || look.tag == '*' ||
            look.tag == '/' || look.tag == Tag.NUM || look.tag == Tag.ID) {
             expr();
+            // Una discriminante è necessaria: se l'operazione richiesta è la stampa
+            // ad ogni expr() deve seguire una istruzione di stampa, altrimenti bisogna
+            // prima attendere il caricamento di due operandi e poi eseguire la somma
+            // o moltiplicazione
             if(opc == OpCode.invokestatic) code.emit(OpCode.invokestatic, 1);
             exprlistp(opc);
         } else {
@@ -294,6 +353,19 @@ public class Translator {
         }
     }
 
+    /**
+     * @author Andrea Delmastro
+     * @param opc opcode da emettere. La procedura exprlistp() può essere richiamata a partire
+     *            dalla procedura stat() nel caso di stat -> print(exprlist) oppure dalla
+     *            procedura expr() nei casi expr -> +(explist) e expr -> *(exprlist). Il risultato
+     *            atteso da exprlistp varia a seconda del contesto dove viene invocata. Il parametro
+     *            opCode serve per discriminare sulla base del contesto di invocazione
+     * @see #stat(int)
+     * @see #expr()
+     * @see #exprlist(OpCode)
+     * @throws ParserException errore in fase di analisi sintattica
+     * @throws LexerException errore in fase di analisi lessicale
+     */
     private void exprlistp(OpCode opc) throws ParserException, LexerException {
         if(look.tag == '+' || look.tag == '-' || look.tag == '*' ||
            look.tag == '/' || look.tag == Tag.NUM || look.tag == Tag.ID) {
@@ -310,18 +382,23 @@ public class Translator {
      * @author Andrea Delmastro
      * @param ifTrue etichetta a cui saltare se l'espressione risulta vera
      * @param ifFalse etichetta a cui saltare se l'espressione risulta falsa
+     * @throws ParserException errore in fase di analisi sintattica
+     * @throws LexerException errore in fase di analisi lessicale
      */
     void bexpr(int ifTrue, int ifFalse) throws ParserException, LexerException {
         switch(look.tag) {
             case Tag.TRUE -> {
+                // <bexpr> -> true
                 match(Tag.TRUE);
                 code.emit(OpCode.GOto, ifTrue);
             }
             case Tag.FALSE -> {
+                // <bexpr> -> false
                 match(Tag.FALSE);
                 code.emit(OpCode.GOto, ifFalse);
             }
             case Tag.AND -> {
+                // <bexpr> -> &&<bexpr><bexpr>
                 match(Tag.AND);
                 int trueLabel = code.newLabel();
                 bexpr(trueLabel, ifFalse);
@@ -329,6 +406,7 @@ public class Translator {
                 bexpr(ifTrue, ifFalse);
             }
             case Tag.OR -> {
+                // <bexpr> -> ||<bexpr><bexpr>
                 match(Tag.OR);
                 int falseLabel = code.newLabel();
                 bexpr(ifTrue, falseLabel);
@@ -336,15 +414,18 @@ public class Translator {
                 bexpr(ifTrue, ifFalse);
             }
             case '!' -> {
+                // <bexpr> -> !<bexpr>
                 match('!');
                 bexpr(ifFalse, ifTrue);
             }
             case '(' -> {
+                // <bexpr> -> (<bexpr>)
                 match('(');
                 bexpr(ifTrue, ifFalse);
                 match(')');
             }
             case Tag.RELOP -> {
+                // <bexpr> -> RELOP<bexpr><bexpr>
                 Token tmpLook = look;
                 match(Tag.RELOP);
                 expr();
