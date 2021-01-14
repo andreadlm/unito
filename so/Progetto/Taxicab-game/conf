@@ -1,0 +1,10 @@
+so_holes=30
+so_sources=20
+so_cap_min=1
+so_cap_max=5
+so_taxi=100
+so_timesec_min=100000000
+so_timesec_max=300000000
+so_timeout=1
+so_duration=5
+so_top_cells=10
