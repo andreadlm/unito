@@ -1,22 +1,19 @@
 public class LexerException extends Exception {
-    final static int exitStatus = 2;
+    public final static int exitStatus = 2;
 
-    int line;
+    int line = -1;
 
     public LexerException(String s, int line) {
         super(s);
         this.line = line;
     }
 
-    public LexerException(String s) {
-        super(s);
-        this.line = -1;
-    }
+    public LexerException(String s) { super(s); }
 
     @Override
     public String toString() {
-        return "[ERROR] --> [LexerException] " +
-                (line != -1 ? "--> near line " + line + " --> " : "") +
+        return "[Error | LexerException]:" +
+                (line != -1 ? " near line " + line + " " : "") +
                 this.getLocalizedMessage();
     }
 }

@@ -1,30 +1,24 @@
 public class ParserException extends Exception {
-    final static int exitStatus = 3;
+    public final static int exitStatus = 3;
 
-    int line;
-    String procedure;
+    String procedure = null;
+    Token tok = null;
+    int line = -1;
 
-    public ParserException(String procedure, int line) {
+    public ParserException(String procedure, Token tok, int line) {
         this.procedure = procedure;
+        this.tok = tok;
         this.line = line;
     }
 
-    public ParserException(String s, String procedure, int line) {
-        super(s);
-        this.procedure = procedure;
-        this.line = line;
-    }
-
-    public ParserException(String s) {
-        super(s);
-        this.line = -1;
-    }
+    public ParserException() { super("Syntax error"); }
 
     @Override
     public String toString() {
-        return "[ERROR] --> [ParserException] " +
-                (line != -1 ? "--> near line " + line : "") +
-                (procedure != null ? " --> procedure " + procedure : "") +
+        return "[Error | ParserException]:" +
+                (line != -1 ? " near line " + line : "") +
+                (procedure != null ? " in procedure ~" + procedure + "~" : "") +
+                (tok != null ? " unpredicted token " + tok : "") +
                 (this.getLocalizedMessage() != null ? " --> " + this.getLocalizedMessage() : "");
     }
 }

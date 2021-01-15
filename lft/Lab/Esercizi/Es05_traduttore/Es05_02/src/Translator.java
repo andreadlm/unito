@@ -1,3 +1,4 @@
+import javax.swing.text.html.parser.Parser;
 import java.io.*;
 
 /**
@@ -27,7 +28,7 @@ public class Translator {
     void match(int t) throws ParserException, LexerException {
         if (look.tag == t) {
             if (look.tag != Tag.EOF) move();
-        } else throw new ParserException("Syntax error", null, lex.line);
+        } else throw new ParserException();
     }
 
     /**
@@ -72,7 +73,7 @@ public class Translator {
             code.emitLabel(lNextStat);
             statlistp(next);
         } else {
-            throw new ParserException("statlist", lex.line);
+            throw new ParserException("statlist", look, lex.line);
         }
     }
 
@@ -96,7 +97,7 @@ public class Translator {
             // associata alla prossima istruzione
             code.emit(OpCode.GOto, next);
         } else {
-            throw new ParserException("statlistp", lex.line);
+            throw new ParserException("statlistp", look, lex.line);
         }
     }
 
@@ -124,7 +125,7 @@ public class Translator {
                     code.emit(OpCode.istore, idAddr);
                     code.emit(OpCode.GOto, next);
                 } else {
-                    throw new ParserException("stat", lex.line);
+                    throw new ParserException("stat", look, lex.line);
                 }
             }
             case Tag.PRINT -> {
@@ -153,16 +154,14 @@ public class Translator {
                     code.emit(OpCode.istore,idAddr);
                     code.emit(OpCode.GOto, next);
                 } else {
-                    throw new ParserException("stat", lex.line);
+                    throw new ParserException("stat", look, lex.line);
                 }
             }
             case Tag.COND -> {
                 // <stat> -> cond<whenlist>else<stat>
-                int elseLabel = code.newLabel();
                 match(Tag.COND);
-                whenlist(next, elseLabel);
+                whenlist(next);
                 match(Tag.ELSE);
-                code.emit(OpCode.label, elseLabel);
                 stat(next);
             }
             case Tag.WHILE -> {
@@ -183,19 +182,17 @@ public class Translator {
                 statlist(next);
                 match('}');
             }
-            default -> throw new ParserException("stat", lex.line);
+            default -> throw new ParserException("stat", look, lex.line);
         }
     }
 
     /**
      * @author Andrea Delmastro
      * @param ifFound etichetta a cui saltare se una condizione risulta vera dopo averne eseguito il corpo
-     * @param ifNFound etichetta a cui saltare se nessuna condizione risultasse vera (etichetta corrispondente
-     * all'inizio del blocco else)
      * @throws ParserException errore in fase di analisi sintattica
      * @throws LexerException errore in fase di analisi lessicale
      */
-    void whenlist(int ifFound, int ifNFound) throws ParserException, LexerException {
+    void whenlist(int ifFound) throws ParserException, LexerException {
         if (look.tag == Tag.WHEN) {
             // <whenlist> -> <whenitem><whenlistp>
             // Etichetta relativa al prossimo blocco condizonale when a cui saltare nel caso in
@@ -204,21 +201,19 @@ public class Translator {
             whenitem(ifFound, nextWhenLbl);
             // Emissione dell'etichetta relativa al prossimo blocco when
             code.emit(OpCode.label, nextWhenLbl);
-            whenlistp(ifFound, ifNFound);
+            whenlistp(ifFound);
         } else {
-            throw new ParserException("whenlist", lex.line);
+            throw new ParserException("whenlist", look, lex.line);
         }
     }
 
     /**
      * @author Andrea Delmastro.
      * @param ifFound etichetta a cui saltare se una condizione risulta vera dopo averne eseguito il corpo
-     * @param ifNFound etichetta a cui saltare se nessuna condizione risulta vera (etichetta corrispondente
-     * all'inizio del blocco else)
      * @throws ParserException errore in fase di analisi sintattica
      * @throws LexerException errore in fase di analisi lessicale
      */
-    void whenlistp(int ifFound, int ifNFound) throws ParserException, LexerException {
+    void whenlistp(int ifFound) throws ParserException, LexerException {
         if (look.tag == Tag.WHEN) {
             // <whenlistp> -> <whenitem><whenlistp>
             // Etichetta relativa al prossimo blocco condizonale when a cui saltare nel caso in
@@ -227,15 +222,10 @@ public class Translator {
             whenitem(ifFound, nextWhenLbl);
             // Emissione dell'etichetta relativa al prossimo blocco when
             code.emit(OpCode.label, nextWhenLbl);
-            whenlistp(ifFound, ifNFound);
-        } else if (look.tag == Tag.ELSE) {
-            // <whenlistp> -> eps
-            // Se si è raggiunta la clausola ELSE, significa che non ci sono più condizioni da valutare. Viene
-            // effettuato un salto verso la porzione di codice contenente le operazioni da eseguire in caso di
-            // else
-            code.emit(OpCode.GOto, ifNFound);
-        } else {
-            throw new ParserException("whenlistp", lex.line);
+            whenlistp(ifFound);
+        // if(look.tag == Tag.ELSE) { <whenlistp> -> ε non è necessario fare nulla, viene eseguito il corpo dell'else}
+        } else if (look.tag != Tag.ELSE) {
+            throw new ParserException("whenlistp", look, lex.line);
         }
     }
 
@@ -264,7 +254,7 @@ public class Translator {
             code.emit(OpCode.label, statLabel);
             stat(ifTrue);
         } else {
-            throw new ParserException("whenitem", lex.line);
+            throw new ParserException("whenitem", look, lex.line);
         }
     }
 
@@ -322,7 +312,7 @@ public class Translator {
                 }
                 code.emit(OpCode.iload, idAddr);
             }
-            default -> throw new ParserException("expr", lex.line);
+            default -> throw new ParserException("expr", look, lex.line);
         }
     }
 
@@ -349,7 +339,7 @@ public class Translator {
             if(opc == OpCode.invokestatic) code.emit(OpCode.invokestatic, 1);
             exprlistp(opc);
         } else {
-            throw new ParserException("exprlist", lex.line);
+            throw new ParserException("exprlist", look, lex.line);
         }
     }
 
@@ -374,7 +364,7 @@ public class Translator {
             else code.emit(opc);
             exprlistp(opc);
         } else if(look.tag != ')') {
-            throw new ParserException("exprlist", lex.line);
+            throw new ParserException("exprlist", look, lex.line);
         }
     }
 
@@ -433,11 +423,10 @@ public class Translator {
                 code.emit(OpCode.getRelopOpCodeFromLexeme(tmpLook), ifTrue);
                 code.emit(OpCode.GOto, ifFalse);
             }
-            default -> throw new ParserException("bexpr", lex.line);
+            default -> throw new ParserException("bexpr", look, lex.line);
         }
     }
 
-    // TODO: rivedere il main
     /**
      * @author Andrea Delmastro
      * @param args riceve come parametro il percorso del file da tradurre
@@ -450,8 +439,8 @@ public class Translator {
             Translator translator = new Translator(lex, br);
             translator.prog();
             br.close();
-        } catch(IOException ioe) {
-            ioe.printStackTrace();
+        } catch(IOException e) {
+            e.printStackTrace();
             System.exit(1);
         } catch(ParserException pe) {
             pe.printStackTrace();
