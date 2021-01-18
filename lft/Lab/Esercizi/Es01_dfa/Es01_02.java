@@ -22,7 +22,7 @@ public class Es01_02 {
 
             switch (state) {
                 case 0:
-                    if(ch >= '0' && ch <= '9') state = 3;
+                    if(ch >= '0' && ch <= '9') state = -1;
                     else if(ch == '_') state = 1;
                     else if((ch >= 'A' && ch <= 'Z') || 
                             (ch >= 'a' && ch <= 'z')) state = 2;
@@ -47,9 +47,9 @@ public class Es01_02 {
 
                 case 3:
                     if((ch >= '0' && ch <= '9') || 
-                       (ch >= 'A' && ch <= 'Z') || 
-                       (ch >= 'a' && ch <= 'z') ||
-                       ch == '_') state = 3;
+                        (ch >= 'A' && ch <= 'Z') || 
+                        (ch >= 'a' && ch <= 'z') ||
+                        ch == '_') state = 3;
                     else state = -1;
                     break;
             }
@@ -66,5 +66,7 @@ public class Es01_02 {
         System.out.println("[x2y2]: " + (scan("x2y2") == true ? "ok" : "err"));
         System.out.println("[lft_lab]: " + (scan("lft_lab") == true ? "ok" : "err"));
         System.out.println("[9_to_5]: " + (scan("9_to_5") == false ? "ok" : "err"));
+        System.out.println("[___1]: " + (scan("___1") == true ? "ok" : "err"));
+        System.out.println("[_32a_]: " + (scan("_32a_") == true ? "ok" : "err"));
     }
 }

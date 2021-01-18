@@ -21,30 +21,30 @@ public class Es01_06 {
             final char ch = s.charAt(i++);
 
             switch (state) {
-                case 0:
-                    if(ch == 'b') state = 1;
-                    else if(ch == 'a') state = 4;
+                case 0: /* Stato iniziale */
+                    if(ch == 'b') state = 1; /* Lettura lettera b in prima posizione */
+                    else if(ch == 'a') state = 4; /* Lettura lettera a in prima posizione -> stringa essere accettata */
                     else state = -1;
                     break;
                 
-                case 1:
-                    if(ch == 'b') state = 2;
+                case 1: /* b letta in prima posizione */
+                    if(ch == 'b') state = 2; /* Lettura b in seconda posizione */
+                    else if(ch == 'a') state = 4; /* Lettura a in seconda posizione -> stringa accettata */
+                    else state = -1; 
+                    break;
+
+                case 2: /* b letta in prima posizione e in seconda posizione */
+                    if(ch == 'b') state = 3; /* Lettura b in terza posizione -> stringa rifiutata */
                     else if(ch == 'a') state = 4;
                     else state = -1;
                     break;
 
-                case 2:
-                    if(ch == 'b') state = 3;
-                    else if(ch == 'a') state = 4;
-                    else state = -1;
-                    break;
-
-                case 3:
+                case 3: /* b letta nella prime tre posizioni: stato pozzo */
                     if(ch == 'b' || ch == 'a') state = 3;
                     else state = -1;
                     break;
 
-                case 4:
+                case 4: /* Stato finale */
                     if(ch == 'b' || ch == 'a') state = 4;
                     else state = -1;
                     break;
@@ -62,5 +62,8 @@ public class Es01_06 {
         System.out.println("[bbabbbbbbbb]: " + (scan("bbabbbbbbbb") == true ? "ok" : "err"));
         System.out.println("[aaaaaaa]: " + (scan("aaaaaaa") == true ? "ok" : "err"));
         System.out.println("[b]: " + (scan("b") == false ? "ok" : "err"));
+        System.out.println("[a]: " + (scan("a") == true ? "ok" : "err"));
+        System.out.println("[ab]: " + (scan("ab") == true ? "ok" : "err"));
+        System.out.println("[ba]: " + (scan("ba") == true ? "ok" : "err"));
     }
 }

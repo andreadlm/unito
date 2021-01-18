@@ -19,47 +19,47 @@ public class Es01_10 {
             final char ch = s.charAt(i++);
 
             switch (state) {
-                case 0:
-                    if(ch == '/') state = 2;
-                    else if(ch == 'a' || ch == '*') state = 1;
+                case 0: /* Stato iniziale */
+                    if(ch == '/') state = 2; /* Lettura / */
+                    else if(ch == 'a' || ch == '*') state = 1; /* Lettura a o * */
                     else state = -1;
                     break;
 
-                case 1:
-                    if(ch == 'a' || ch == '*') state = 1;
-                    else if(ch == '/') state = 2;
+                case 1: /* Letta sequenza di a o * o / fuori dal commento il cui ultimo simbolo è a o * */
+                    if(ch == 'a' || ch == '*') state = 1; /* Letto a o * */
+                    else if(ch == '/') state = 2; /* Letto / */
                     else state = -1;
                     break;
                 
-                case 2:
+                case 2: /* Letta sequenza di a o * o / fuori dal commento il cui ultimo simbolo è / */
                     if(ch == '/') state = 2;
-                    else if(ch == '*') state = 3;
-                    else if(ch == 'a') state = 1;
+                    else if(ch == '*') state = 3; /* Lettura * */
+                    else if(ch == 'a') state = 1; /* Lettura a */ 
                     else state = -1;
                     break;
 
-                case 3:
-                    if(ch == '*') state = 5;
-                    else if(ch == 'a' || ch == '/') state = 4;
+                case 3: /* Letti /* -> inizio commento */
+                    if(ch == '*') state = 5; /* Letto  * */
+                    else if(ch == 'a' || ch == '/') state = 4; /* Letto carattere ammesso nel commento */
                     else state = -1;
                     break;
 
-                case 4:
-                    if(ch == '*') state = 5;
-                    else if(ch == 'a' || ch == '/') state = 4;
+                case 4: /* Letta sequenza di caratteri interna al commento il cui ultimo simbolo non è * */
+                    if(ch == '*') state = 5; /* Letto * */
+                    else if(ch == 'a' || ch == '/') state = 4; /* Letto carattere ammesso nel commento */
                     else state = -1;
                     break;
 
-                case 5:
-                    if(ch == '*') state = 5;
-                    else if(ch == 'a') state = 4;
-                    else if(ch == '/') state = 6;
+                case 5: /* Letta sequenza di caratteri interna al commento il cui ultimo simbolo è * */
+                    if(ch == '*') state = 5; /* Letto * */
+                    else if(ch == 'a') state = 4; /* Letto carattere ammesso nel commento (non / che chiuderebbe il commento) */
+                    else if(ch == '/') state = 6; /* Letto / */
                     else state = -1;
                     break;
 
-                case 6:
-                    if(ch == '/') state = 2;
-                    else if(ch == 'a' || ch == '*') state = 1;
+                case 6: /* Chiuso un commento */
+                    if(ch == '/') state = 2; /* Lettura / */
+                    else if(ch == 'a' || ch == '*') state = 1; /* Lettura a o * */
                     else state = -1;
                     break;
             }

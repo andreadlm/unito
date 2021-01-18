@@ -21,33 +21,33 @@ public class Es01_07 {
             final char ch = s.charAt(i++);
 
             switch (state) {
-                case 0:
-                    if(ch == 'b') state = 4;
-                    else if(ch == 'a') state = 1;
+                case 0: /* Stato iniziale */
+                    if(ch == 'b') state = 4; /* Lettura di b */
+                    else if(ch == 'a') state = 1; /* Lettura di a */
                     else state = -1;
                     break;
                 
-                case 1:
-                    if(ch == 'b') state = 2;
-                    else if(ch == 'a') state = 1;
+                case 1: /* Ultimo carattere letto a */
+                    if(ch == 'b') state = 2; /* Lettura b */
+                    else if(ch == 'a') state = 1; /* Lettura a */
                     else state = -1;
                     break;
 
-                case 2:
-                    if(ch == 'b') state = 3;
-                    else if(ch == 'a') state = 1;
+                case 2: /* Penultimo carattere letto a */
+                    if(ch == 'b') state = 3; /* Lettura b */
+                    else if(ch == 'a') state = 1; /* Lettura a */
                     else state = -1;
                     break;
 
-                case 3:
-                    if(ch == 'b') state = 4;
-                    else if(ch == 'a') state = 1;
+                case 3: /* Terzultimo carattere letto a */
+                    if(ch == 'b') state = 4; /* Lettura di b */
+                    else if(ch == 'a') state = 1; /* Lettura di a */
                     else state = -1;
                     break;
 
-                case 4:
-                    if(ch == 'b') state = 4;
-                    else if(ch == 'a') state = 1;
+                case 4: /* Ultimi tre caratteri letti bbb */
+                    if(ch == 'b') state = 4; /* Lettura b */
+                    else if(ch == 'a') state = 1; /* Lettura a */
                     else state = -1;
                     break;
             }

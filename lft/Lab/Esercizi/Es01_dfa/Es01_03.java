@@ -23,36 +23,36 @@ public class Es01_03 {
             final char ch = s.charAt(i++);
 
             switch (state) {
-                case 0:
-                    if((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) state = 4;
-                    else if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 0) state = 1;
-                    else if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 1) state = 2;
-                    else state = -1;
+                case 0: /* Stato iniziale */
+                    if((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) state = 4; /* Le stringhe devono cominciare con un numero */
+                    else if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 0) state = 1; /* Lettura numero pari */
+                    else if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 1) state = 2; /* Lettura numero dispari */
+                    else state = -1; /* Carattere non riconosciuto */
                     break;
             
-                case 1:
-                    if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 0) state = 1;
-                    else if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 1) state = 2;
-                    else if((ch >= 'l' && ch <= 'z') || (ch >= 'L' && ch <= 'Z')) state = 4;
-                    else if((ch >= 'a' && ch <= 'k') || (ch >= 'A' && ch <= 'K')) state = 3;
+                case 1: /* Ultimo numero letto pari */
+                    if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 0) state = 1; /* Lettura numero pari */
+                    else if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 1) state = 2; /* Lettura numero dispari */
+                    else if((ch >= 'l' && ch <= 'z') || (ch >= 'L' && ch <= 'Z')) state = 4; /* Lettura lettera compresa tra L e Z -> la matricola termina per numero pari, la stringa deve essere rifiutata */
+                    else if((ch >= 'a' && ch <= 'k') || (ch >= 'A' && ch <= 'K')) state = 3; /* Lettura lettera compresa tra A e K -> la matricola termina per numero pari */
                     else state = -1;
                     break;
 
-                case 2:
-                    if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 0) state = 1;
-                    else if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 1) state = 2;
-                    else if((ch >= 'l' && ch <= 'z') || (ch >= 'L' && ch <= 'Z')) state = 3;
-                    else if((ch >= 'a' && ch <= 'k') || (ch >= 'A' && ch <= 'K')) state = 4;
+                case 2: /* Utlimo numero letto dispari */
+                    if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 0) state = 1; /* Lettura numero pari */
+                    else if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 1) state = 2; /* Lettura numero dispari */
+                    else if((ch >= 'l' && ch <= 'z') || (ch >= 'L' && ch <= 'Z')) state = 3; /* Lettura lettera compresa tra L e K -> la matricola termina per numero dispari */
+                    else if((ch >= 'a' && ch <= 'k') || (ch >= 'A' && ch <= 'K')) state = 4; /* Lettura lettera compresa tra A e K -> la matricola termina per numero dispari, la stringa deve essere rifuitata */
                     else state = -1;
                     break;
 
-                case 3:
-                    if((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) state = 3;
-                    else if(ch >= '0' && ch <= '9') state = 4;
+                case 3: /* Stato finale */
+                    if((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) state = 3; /* Letta lettera */
+                    else if(ch >= '0' && ch <= '9') state = 4; /* Il cognome dello studente non può contenere un numero */
                     else state = -1;
                     break;
 
-                case 4:
+                case 4: /* Stato pozzo */
                     if((ch >= 'A' && ch <= 'Z') || 
                        (ch >= 'a' && ch <= 'z') ||
                        (ch >= '0' && ch <= '9')) state = 4;

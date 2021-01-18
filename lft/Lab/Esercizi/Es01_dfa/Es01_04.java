@@ -7,9 +7,9 @@
  * Inoltre, per essere accettata, la stringa deve contentere informazioni
  * relative ad uno studente del turno T2 o T3 (rispettivamente, congome A...K
  * e matricola pari, cognome L...Z e matricola dispari).
- * La stringa può essere preceduta e seguita da un numero indefinito >= 0 di 0,
+ * La stringa può essere preceduta e seguita da un numero indefinito >= 0 di ' ',
  * inoltre la matricola e il cognome possono essere separati da un numero
- * qualsiasi di 0.
+ * qualsiasi di ' '.
  * 
  * NB: l'implementazione rispecchia al meglio la stuttura del DFA
  * "su carta", pertanto alcune ottimizzazioni sarebbero possibili.
@@ -26,36 +26,36 @@ public class Es01_04 {
             final char ch = s.charAt(i++);
 
             switch (state) {
-                case 0:
-                    if(ch == ' ') state = 0;
-                    else if((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) state = 4;
-                    else if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 0) state = 1;
-                    else if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 1) state = 2;
+                case 0: /* Stato iniziale */
+                    if(ch == ' ') state = 0; /* Lettura spazio */
+                    else if((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) state = 4; /* Le stringhe devono cominciare (dopo una eventuale sequenza di ' ') con un numero */
+                    else if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 0) state = 1; /* Lettura numero pari */
+                    else if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 1) state = 2; /* Lettura numero dispari */
                     else state = -1;
                     break;
             
-                case 1:
-                    if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 0) state = 1;
-                    else if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 1) state = 2;
-                    else if((ch >= 'l' && ch <= 'z') || (ch >= 'L' && ch <= 'Z')) state = 4;
-                    else if((ch >= 'a' && ch <= 'k') || (ch >= 'A' && ch <= 'K')) state = 3;
-                    else if(ch == ' ') state = 6;
+                case 1: /* Ultimo numero letto pari */
+                    if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 0) state = 1; /* Lettura numero pari */
+                    else if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 1) state = 2; /* Lettura numero dispari */
+                    else if((ch >= 'l' && ch <= 'z') || (ch >= 'L' && ch <= 'Z')) state = 4; /* Lettura lettera compresa tra L e Z -> la matricola termina per numero pari, la stringa deve essere rifiutata */
+                    else if((ch >= 'a' && ch <= 'k') || (ch >= 'A' && ch <= 'K')) state = 3; /* Lettura lettera compresa tra A e K -> la matricola termina per numero pari */
+                    else if(ch == ' ') state = 6; /* Lettura spazio */
                     else state = -1;
                     break;
 
-                case 2:
-                    if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 0) state = 1;
-                    else if(ch >= '0' && ch <= '9' && (ch - 48) % 2 == 1) state = 2;
-                    else if((ch >= 'l' && ch <= 'z') || (ch >= 'L' && ch <= 'Z')) state = 3;
-                    else if((ch >= 'a' && ch <= 'k') || (ch >= 'A' && ch <= 'K')) state = 4;
-                    else if(ch == ' ') state = 5;
+                case 2: /* Ultimo numero letto dispari */
+                    if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 0) state = 1; /* Lettura numero pari */
+                    else if(ch >= '0' && ch <= '9' && (ch - '0') % 2 == 1) state = 2; /* Lettura numero dispari */
+                    else if((ch >= 'l' && ch <= 'z') || (ch >= 'L' && ch <= 'Z')) state = 3; /* Lettura lettera compresa tra L e Z -> la matricola termina per numero dispari */
+                    else if((ch >= 'a' && ch <= 'k') || (ch >= 'A' && ch <= 'K')) state = 4; /* Lettura lettera compresa tra A e K -> la matricola termina per numero pari, la stringa deve essere rifiutata */
+                    else if(ch == ' ') state = 5; /* Lettura spazio */
                     else state = -1;
                     break;
 
-                case 3:
-                    if((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) state = 3;
-                    else if(ch >= '0' && ch <= '9') state = 4;
-                    else if(ch == ' ') state = 7;
+                case 3: /* Stato finale: cognome dello studente */ 
+                    if((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z')) state = 3; /* Lettura lettera */
+                    else if(ch >= '0' && ch <= '9') state = 4; /* Il cognome delle studente non può contere numeri */
+                    else if(ch == ' ') state = 7; /* Lettura spazio */
                     else state = -1;
                     break;
 
@@ -66,7 +66,7 @@ public class Es01_04 {
                     else state = -1;
                     break;
 
-                case 5:
+                case 5: /* Ultimo carattere letto spazio successivo ad una matricola dispari */
                     if(ch == ' ') state = 5;
                     else if((ch >= 'l' && ch <= 'z') || (ch >= 'L' && ch <= 'Z')) state = 3;
                     else if((ch >= 'A' && ch <= 'K') ||
@@ -75,7 +75,7 @@ public class Es01_04 {
                     else state = -1;
                     break;
 
-                case 6:
+                case 6: /* Ultimo carattere letto spazio successivo ad una matricola pari */
                     if(ch == ' ') state = 6;
                     else if((ch >= 'a' && ch <= 'k') || (ch >= 'A' && ch <= 'K')) state = 3;
                     else if((ch >= 'l' && ch <= 'z') || 
@@ -84,11 +84,11 @@ public class Es01_04 {
                     else state = -1;
                     break;
 
-                case 7:
+                case 7: /* Stato finale: sequenze di ' ' */
                     if(ch == ' ') state = 7;
                     else if((ch >= 'a' && ch <= 'z') || 
                             (ch >= 'A' && ch <= 'Z') || 
-                            (ch >= '0' && ch <= '9')) state = 4;
+                            (ch >= '0' && ch <= '9')) state = 4; /* Simboli successivi agli spazi finali non sono ammessi */
                     else state = -1;
                     break;
             }
@@ -107,5 +107,6 @@ public class Es01_04 {
         System.out.println("[123456Bia nchi]: " + (scan("123456Bia nchi") == false ? "ok" : "err"));
         System.out.println("[Rossi]: " + (scan("Rossi") == false ? "ok" : "err"));
         System.out.println("[2Bianchi]: " + (scan("2Bianchi") == true ? "ok" : "err"));
+        System.out.println("[  1123 Delmastro   ]: " + (scan("  1123 Delmastro   ") == false ? "ok" : "err"));
     }
 }

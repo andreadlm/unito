@@ -18,37 +18,37 @@ public class Es01_09 {
             final char ch = s.charAt(i++);
 
             switch (state) {
-                case 0:
-                    if(ch == '/') state = 1;
-                    else state = -1;
+                case 0: /* Stato iniziale */
+                    if(ch == '/') state = 1; /* Lettura / */
+                    else state = -1; /* La stringa deve cominciare con / */
                     break;
                 
-                case 1:
-                    if(ch == '*') state = 2;
+                case 1: /* Letto / iniziale */
+                    if(ch == '*') state = 2; /* Lettura * */
+                    else state = -1; /* La stringa deve cominciare con /* */
+                    break;
+
+                case 2: /* Letto /* */
+                    if(ch == '*') state = 4; /* Letto * */
+                    else if(ch == 'a' || ch == '/') state = 3; /* Letto carattere ammesso nel commento */
                     else state = -1;
                     break;
 
-                case 2:
-                    if(ch == '*') state = 4;
-                    else if(ch == 'a' || ch == '/') state = 3;
+                case 3: /* Letto /* più una sequenza di caratteri e * di cui l'ultimoo simbolo è un carattere */
+                    if(ch == '*') state = 4; /* Lettura * */
+                    else if(ch == 'a' || ch == '/') state = 3; /* Letto carattere ammesso nel commento */
                     else state = -1;
                     break;
 
-                case 3:
-                    if(ch == '*') state = 4;
-                    else if(ch == 'a' || ch == '/') state = 3;
+                case 4: /* Letto /* più una sequenza di caratteri e * di cui l'ultimoo simbolo è un * */
+                    if(ch == '*') state = 4; /* Lettura * */
+                    else if(ch == 'a') state = 3; /* Lettura carattere ammesso nel commento (non / che chiuderebe il commento) */
+                    else if(ch == '/') state = 5; /* Lettura /, l'* era quello finale */
                     else state = -1;
                     break;
 
-                case 4:
-                    if(ch == '*') state = 4;
-                    else if(ch == 'a') state = 3;
-                    else if(ch == '/') state = 5;
-                    else state = -1;
-                    break;
-
-                case 5:
-                    state = -1;
+                case 5: /* Letto un commento completo */
+                    state = -1; /* Qualunque simbolo invaliderebbe la stringa */
                     break;
             }
         }
