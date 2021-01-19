@@ -1,4 +1,3 @@
-import javax.swing.text.html.parser.Parser;
 import java.io.*;
 
 /**
@@ -81,6 +80,8 @@ public class Translator {
      * @author Andrea Delmastro
      * @param next etichetta a cui saltare al termine dell'esecuzione di tutti gli
      *             statement
+     * @throws ParserException errore in fase di analisi sintattica
+     * @throws LexerException errore in fase di analisi lessicale
      */
     void statlistp(int next) throws ParserException, LexerException {
         if(look.tag == ';') {
@@ -166,15 +167,15 @@ public class Translator {
             }
             case Tag.WHILE -> {
                 // <stat> -> while(<bexpr>)<stat>
-                int stat1_next = code.newLabel();
-                int bexpr_if_true = code.newLabel();
+                int nextStatLable = code.newLabel();
+                int bodyLable = code.newLabel();
                 match(Tag.WHILE);
                 match('(');
-                code.emit(OpCode.label, stat1_next);
-                bexpr(bexpr_if_true, next);
-                code.emit(OpCode.label, bexpr_if_true);
+                code.emit(OpCode.label, nextStatLable);
+                bexpr(bodyLable, next);
+                code.emit(OpCode.label, bodyLable);
                 match(')');
-                stat(stat1_next);
+                stat(nextStatLable);
             }
             case '{' -> {
                 // <stat> -> {<statlist>}
@@ -188,7 +189,7 @@ public class Translator {
 
     /**
      * @author Andrea Delmastro
-     * @param ifFound etichetta a cui saltare se una condizione risulta vera dopo averne eseguito il corpo
+     * @param ifFound etichetta a cui saltare dopo aver eseguito uno degli statements
      * @throws ParserException errore in fase di analisi sintattica
      * @throws LexerException errore in fase di analisi lessicale
      */
@@ -209,7 +210,7 @@ public class Translator {
 
     /**
      * @author Andrea Delmastro.
-     * @param ifFound etichetta a cui saltare se una condizione risulta vera dopo averne eseguito il corpo
+     * @param ifFound etichetta a cui saltare dopo aver eseguito uno degli statements
      * @throws ParserException errore in fase di analisi sintattica
      * @throws LexerException errore in fase di analisi lessicale
      */
