@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Lexer {
 
@@ -198,18 +196,18 @@ public class Lexer {
 
                     // Una sequenza di lettere può identificare anche identificare parole
                     // riservate del linguaggio, che rappresentano particolari istruzioni
-                    switch (s) {
-                        case "cond": return Word.cond;
-                        case "when": return Word.when;
-                        case "then": return Word.then;
-                        case "else": return Word.elsetok;
-                        case "while": return Word.whiletok;
-                        case "do": return Word.dotok;
-                        case "seq": return Word.seq;
-                        case "print": return Word.print;
-                        case "read": return Word.read;
-                        default: return new Word(Tag.ID, s);
-                    }
+                    return switch (s) {
+                        case "cond" -> Word.cond;
+                        case "when" -> Word.when;
+                        case "then" -> Word.then;
+                        case "else" -> Word.elsetok;
+                        case "while" -> Word.whiletok;
+                        case "do" -> Word.dotok;
+                        case "seq" -> Word.seq;
+                        case "print" -> Word.print;
+                        case "read" -> Word.read;
+                        default -> new Word(Tag.ID, s);
+                    };
 
                 } else if (Character.isDigit(peek)) {
                     if(peek == '0') {

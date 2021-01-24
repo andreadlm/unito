@@ -389,13 +389,13 @@ public class Translator {
      * @throws LexerException errore in fase di analisi lessicale
      */
     void bexpr(int ifTrue, int ifFalse) throws ParserException, LexerException {
-        if (look.tag == Tag.RELOP) {// <bexpr> -> RELOP<bexpr><bexpr>
+        if (look.tag == Tag.RELOP) {
+            // <bexpr> -> RELOP<bexpr><bexpr>
             Token tmpLook = look;
             match(Tag.RELOP);
             expr();
             expr();
-            code.emit(OpCode.getRelopOpCodeFromLexeme(tmpLook), ifTrue);
-            code.emit(OpCode.GOto, ifFalse);
+            code.emit(OpCode.getOppositeRelopOpCodeFromLexeme(tmpLook), ifFalse);
         } else {
             throw new ParserException("bexpr", look, lex.line);
         }

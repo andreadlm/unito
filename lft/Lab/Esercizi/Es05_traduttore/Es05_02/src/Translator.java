@@ -110,7 +110,7 @@ public class Translator {
      */
     void stat(int next) throws ParserException, LexerException {
         switch(look.tag) {
-            case '=' -> {
+            case '=':
                 // <stat> -> =ID<expr>
                 match('=');
                 if(look.tag == Tag.ID) {
@@ -128,16 +128,18 @@ public class Translator {
                 } else {
                     throw new ParserException("stat", look, lex.line);
                 }
-            }
-            case Tag.PRINT -> {
+                break;
+
+            case Tag.PRINT:
                 // <stat> -> print(<exprlist>)
                 match(Tag.PRINT);
                 match('(');
                 exprlist(OpCode.invokestatic);
                 match(')');
                 code.emit(OpCode.GOto, next);
-            }
-            case Tag.READ -> {
+                break;
+
+            case Tag.READ:
                 // <stat> -> read(ID)
                 match(Tag.READ);
                 match('(');
@@ -157,15 +159,17 @@ public class Translator {
                 } else {
                     throw new ParserException("stat", look, lex.line);
                 }
-            }
-            case Tag.COND -> {
+                break;
+
+            case Tag.COND:
                 // <stat> -> cond<whenlist>else<stat>
                 match(Tag.COND);
                 whenlist(next);
                 match(Tag.ELSE);
                 stat(next);
-            }
-            case Tag.WHILE -> {
+                break;
+
+            case Tag.WHILE:
                 // <stat> -> while(<bexpr>)<stat>
                 int nextStatLable = code.newLabel();
                 int bodyLable = code.newLabel();
@@ -176,14 +180,16 @@ public class Translator {
                 code.emit(OpCode.label, bodyLable);
                 match(')');
                 stat(nextStatLable);
-            }
-            case '{' -> {
+                break;
+
+            case '{':
                 // <stat> -> {<statlist>}
                 match('{');
                 statlist(next);
                 match('}');
-            }
-            default -> throw new ParserException("stat", look, lex.line);
+                break;
+
+            default: throw new ParserException("stat", look, lex.line);
         }
     }
 
@@ -266,41 +272,46 @@ public class Translator {
      */
     void expr() throws ParserException, LexerException {
         switch(look.tag) {
-            case '+' -> {
+            case '+':
                 // <expr> -> +(<exprlist>)
                 match('+');
                 match('(');
                 exprlist(OpCode.iadd);
                 match(')');
-            }
-            case '*' -> {
+                break;
+
+            case '*':
                 // <expr> -> *(<exprlist>)
                 match('*');
                 match('(');
                 exprlist(OpCode.imul);
                 match(')');
-            }
-            case '-' -> {
+                break;
+
+            case '-':
                 // <expr> -> - <expr><expr>
                 match('-');
                 expr();
                 expr();
                 code.emit(OpCode.isub);
-            }
-            case '/' -> {
+                break;
+
+            case '/':
                 // <expr> -> /<expr><expr>
                 match('/');
                 expr();
                 expr();
                 code.emit(OpCode.idiv);
-            }
-            case Tag.NUM -> {
+                break;
+
+            case Tag.NUM:
                 // <expr> -> NUM
                 NumberTok numTok = (NumberTok)look;
                 match(Tag.NUM);
                 code.emit(OpCode.ldc, numTok.lexeme);
-            }
-            case Tag.ID -> {
+                break;
+
+            case Tag.ID:
                 // <expr> -> ID
                 Word word = (Word)look;
                 match(Tag.ID);
@@ -312,8 +323,9 @@ public class Translator {
                     st.insert(((Word)look).lexeme, count++);
                 }
                 code.emit(OpCode.iload, idAddr);
-            }
-            default -> throw new ParserException("expr", look, lex.line);
+                break;
+
+            default: throw new ParserException("expr", look, lex.line);
         }
     }
 
@@ -378,44 +390,50 @@ public class Translator {
      */
     void bexpr(int ifTrue, int ifFalse) throws ParserException, LexerException {
         switch(look.tag) {
-            case Tag.TRUE -> {
+            case Tag.TRUE:
                 // <bexpr> -> true
                 match(Tag.TRUE);
                 code.emit(OpCode.GOto, ifTrue);
-            }
-            case Tag.FALSE -> {
+                break;
+
+            case Tag.FALSE:
                 // <bexpr> -> false
                 match(Tag.FALSE);
                 code.emit(OpCode.GOto, ifFalse);
-            }
-            case Tag.AND -> {
+                break;
+
+            case Tag.AND :
                 // <bexpr> -> &&<bexpr><bexpr>
                 match(Tag.AND);
                 int trueLabel = code.newLabel();
                 bexpr(trueLabel, ifFalse);
                 code.emit(OpCode.label, trueLabel);
                 bexpr(ifTrue, ifFalse);
-            }
-            case Tag.OR -> {
+                break;
+
+            case Tag.OR:
                 // <bexpr> -> ||<bexpr><bexpr>
                 match(Tag.OR);
                 int falseLabel = code.newLabel();
                 bexpr(ifTrue, falseLabel);
                 code.emit(OpCode.label, falseLabel);
                 bexpr(ifTrue, ifFalse);
-            }
-            case '!' -> {
+                break;
+
+            case '!':
                 // <bexpr> -> !<bexpr>
                 match('!');
                 bexpr(ifFalse, ifTrue);
-            }
-            case '(' -> {
+                break;
+
+            case '(':
                 // <bexpr> -> (<bexpr>)
                 match('(');
                 bexpr(ifTrue, ifFalse);
                 match(')');
-            }
-            case Tag.RELOP -> {
+                break;
+
+            case Tag.RELOP:
                 // <bexpr> -> RELOP<bexpr><bexpr>
                 Token tmpLook = look;
                 match(Tag.RELOP);
@@ -423,8 +441,9 @@ public class Translator {
                 expr();
                 code.emit(OpCode.getRelopOpCodeFromLexeme(tmpLook), ifTrue);
                 code.emit(OpCode.GOto, ifFalse);
-            }
-            default -> throw new ParserException("bexpr", look, lex.line);
+                break;
+
+            default: throw new ParserException("bexpr", look, lex.line);
         }
     }
 

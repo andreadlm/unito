@@ -14,7 +14,6 @@ public class Lexer {
     }
 
     public Token lexical_scan(BufferedReader br) throws LexerException {
-        // TODO: un miglioramento potrebbe essere incrementare line una sola volta nel primo if
         while(peek == ' ' || peek == '\t' || peek == '\n' || peek == '\r' || peek == '/') {
             if(peek == '/') {
                 // Caso '/': lo '/' va trattato separatamente dagli altri caratteri
@@ -59,7 +58,6 @@ public class Lexer {
                         // 2, rappresentate la fine del commento (una sequenza */ è stata
                         // identificata
                     } while(state != 2 && peek != (char)-1);
-                    // TODO: un miglioramento potrebbe essere scrivere la condizione EOF come parte del DFA
                     // Ogni commento deve essere chiuso prima della fine del file da specifiche
                     // di implementazione
                     if(peek == (char)-1)
@@ -198,20 +196,20 @@ public class Lexer {
 
                     // Una sequenza di lettere può identificare anche identificare parole
                     // riservate del linguaggio, che rappresentano particolari istruzioni
-                    return switch (s) {
-                        case "cond" -> Word.cond;
-                        case "when" -> Word.when;
-                        case "then" -> Word.then;
-                        case "else" -> Word.elsetok;
-                        case "while" -> Word.whiletok;
-                        case "do" -> Word.dotok;
-                        case "seq" -> Word.seq;
-                        case "print" -> Word.print;
-                        case "read" -> Word.read;
-                        case "true" -> Word.truetok;
-                        case "false" -> Word.falsetok;
-                        default -> new Word(Tag.ID, s);
-                    };
+                    switch (s) {
+                        case "cond": return Word.cond;
+                        case "when": return Word.when;
+                        case "then": return Word.then;
+                        case "else": return Word.elsetok;
+                        case "while": return Word.whiletok;
+                        case "do": return Word.dotok;
+                        case "seq": return Word.seq;
+                        case "print": return Word.print;
+                        case "read": return Word.read;
+                        case "true": return Word.truetok;
+                        case "false": return Word.falsetok;
+                        default: return new Word(Tag.ID, s);
+                    }
 
                 } else if (Character.isDigit(peek)) {
                     if(peek == '0') {
@@ -240,7 +238,7 @@ public class Lexer {
         }
     }
 
-    /* Main utile per testare il funzionamento della classe Lexer */
+    // Main utile per testare il funzionamento della classe Lexer
     public static void main(String[] args) {
         Lexer lex = new Lexer();
         String path = "C:\\Users\\Andrea\\Documents\\unito\\lft\\Lab\\Esercizi\\Es05_traduttore\\Es05_02\\docs\\test\\lexer\\lex_test.txt"; // il percorso del file da leggere
