@@ -35,23 +35,23 @@ public class Translator {
      * @throws ParserException errore in fase di analisi sintattica
      * @throws LexerException errore in fase di analisi lessicale
      */
-    public void prog() throws ParserException, LexerException {
-        // <prog> -> <statlist>EOF
-        // Etichetta a cui saltare al termine dell'esecuzione del programma
-        // L'etichetta è necessaria poichè la procedura statlist() richiede
-        // come attributo ereditato l'etichetta a cui saltare al temine
-        // dell'esecuzione di tutti gli statement
-        int lNextProg = code.newLabel();
-        // La lista di statement dovrà eseguire tutte le istruzioni e poi
-        // saltare al termine del programmma
-        statlist(lNextProg);
-        code.emitLabel(lNextProg);
-        match(Tag.EOF);
-        try {
+    public void prog() throws ParserException, LexerException, IOException {
+        if(look.tag == '=' || look.tag == Tag.PRINT || look.tag == Tag.COND ||
+                look.tag == Tag.READ || look.tag == Tag.WHILE || look.tag == '{') {
+            // <prog> -> <statlist>EOF
+            // Etichetta a cui saltare al termine dell'esecuzione del programma
+            // L'etichetta è necessaria poichè la procedura statlist() richiede
+            // come attributo ereditato l'etichetta a cui saltare al temine
+            // dell'esecuzione di tutti gli statement
+            int lNextProg = code.newLabel();
+            // La lista di statement dovrà eseguire tutte le istruzioni e poi
+            // saltare al termine del programmma
+            statlist(lNextProg);
+            code.emitLabel(lNextProg);
+            match(Tag.EOF);
             code.toJasmin();
-        }
-        catch(java.io.IOException e) {
-            System.out.println(e.toString());
+        } else {
+            throw new ParserException("prog", look, lex.line);
         }
     }
 
@@ -110,16 +110,16 @@ public class Translator {
      */
     void stat(int next) throws ParserException, LexerException {
         switch(look.tag) {
-            case '=':
+            case '=' -> {
                 // <stat> -> =ID<expr>
                 match('=');
-                if(look.tag == Tag.ID) {
+                if (look.tag == Tag.ID) {
                     // Ricerca dell'indice corrispondente alla variabile
-                    int idAddr = st.lookupAddress(((Word)look).lexeme);
-                    if(idAddr == -1) {
+                    int idAddr = st.lookupAddress(((Word) look).lexeme);
+                    if (idAddr == -1) {
                         // La variabile non è mai stata utilizzata, viene creata
                         idAddr = count;
-                        st.insert(((Word)look).lexeme, count++);
+                        st.insert(((Word) look).lexeme, count++);
                     }
                     match(Tag.ID);
                     expr();
@@ -128,48 +128,48 @@ public class Translator {
                 } else {
                     throw new ParserException("stat", look, lex.line);
                 }
-                break;
+            }
 
-            case Tag.PRINT:
+            case Tag.PRINT -> {
                 // <stat> -> print(<exprlist>)
                 match(Tag.PRINT);
                 match('(');
                 exprlist(OpCode.invokestatic);
                 match(')');
                 code.emit(OpCode.GOto, next);
-                break;
+            }
 
-            case Tag.READ:
+            case Tag.READ -> {
                 // <stat> -> read(ID)
                 match(Tag.READ);
                 match('(');
-                if(look.tag == Tag.ID) {
+                if (look.tag == Tag.ID) {
                     // Ricerca dell'indice corrispondente alla variabile
-                    int idAddr = st.lookupAddress(((Word)look).lexeme);
-                    if (idAddr==-1) {
+                    int idAddr = st.lookupAddress(((Word) look).lexeme);
+                    if (idAddr == -1) {
                         // La variabile non è mai stata utilizzata, viene creata
                         idAddr = count;
-                        st.insert(((Word)look).lexeme,count++);
+                        st.insert(((Word) look).lexeme, count++);
                     }
                     match(Tag.ID);
                     match(')');
-                    code.emit(OpCode.invokestatic,0);
-                    code.emit(OpCode.istore,idAddr);
+                    code.emit(OpCode.invokestatic, 0);
+                    code.emit(OpCode.istore, idAddr);
                     code.emit(OpCode.GOto, next);
                 } else {
                     throw new ParserException("stat", look, lex.line);
                 }
-                break;
+            }
 
-            case Tag.COND:
+            case Tag.COND -> {
                 // <stat> -> cond<whenlist>else<stat>
                 match(Tag.COND);
                 whenlist(next);
                 match(Tag.ELSE);
                 stat(next);
-                break;
+            }
 
-            case Tag.WHILE:
+            case Tag.WHILE -> {
                 // <stat> -> while(<bexpr>)<stat>
                 int nextStatLable = code.newLabel();
                 int bodyLable = code.newLabel();
@@ -180,16 +180,16 @@ public class Translator {
                 code.emit(OpCode.label, bodyLable);
                 match(')');
                 stat(nextStatLable);
-                break;
+            }
 
-            case '{':
+            case '{' -> {
                 // <stat> -> {<statlist>}
                 match('{');
                 statlist(next);
                 match('}');
-                break;
+            }
 
-            default: throw new ParserException("stat", look, lex.line);
+            default -> throw new ParserException("stat", look, lex.line);
         }
     }
 
@@ -272,60 +272,58 @@ public class Translator {
      */
     void expr() throws ParserException, LexerException {
         switch(look.tag) {
-            case '+':
+            case '+' -> {
                 // <expr> -> +(<exprlist>)
                 match('+');
                 match('(');
                 exprlist(OpCode.iadd);
                 match(')');
-                break;
+            }
 
-            case '*':
+            case '*' -> {
                 // <expr> -> *(<exprlist>)
                 match('*');
                 match('(');
                 exprlist(OpCode.imul);
                 match(')');
-                break;
+            }
 
-            case '-':
+            case '-' -> {
                 // <expr> -> - <expr><expr>
                 match('-');
                 expr();
                 expr();
                 code.emit(OpCode.isub);
-                break;
+            }
 
-            case '/':
+            case '/' -> {
                 // <expr> -> /<expr><expr>
                 match('/');
                 expr();
                 expr();
                 code.emit(OpCode.idiv);
-                break;
+            }
 
-            case Tag.NUM:
+            case Tag.NUM -> {
                 // <expr> -> NUM
-                NumberTok numTok = (NumberTok)look;
+                NumberTok numTok = (NumberTok) look;
                 match(Tag.NUM);
                 code.emit(OpCode.ldc, numTok.lexeme);
-                break;
+            }
 
-            case Tag.ID:
+            case Tag.ID -> {
                 // <expr> -> ID
-                Word word = (Word)look;
-                match(Tag.ID);
                 // Ricerca dell'indice corrispondente alla variabile
-                int idAddr = st.lookupAddress(word.lexeme);
-                if(idAddr == -1) {
-                    // La variabile non è mai stata utilizzata, viene creata
-                    idAddr = count;
-                    st.insert(((Word)look).lexeme, count++);
-                }
+                int idAddr = st.lookupAddress(((Word) look).lexeme);
+                if (idAddr == -1)
+                    // Indice non trovato all'interno della symbol table
+                    // variabile mai inizializzata
+                    throw new ParserException("expr", look, lex.line);
                 code.emit(OpCode.iload, idAddr);
-                break;
+                match(Tag.ID);
+            }
 
-            default: throw new ParserException("expr", look, lex.line);
+            default -> throw new ParserException("expr", look, lex.line);
         }
     }
 
@@ -377,7 +375,7 @@ public class Translator {
             else code.emit(opc);
             exprlistp(opc);
         } else if(look.tag != ')') {
-            throw new ParserException("exprlist", look, lex.line);
+            throw new ParserException("exprlistp", look, lex.line);
         }
     }
 
@@ -390,50 +388,50 @@ public class Translator {
      */
     void bexpr(int ifTrue, int ifFalse) throws ParserException, LexerException {
         switch(look.tag) {
-            case Tag.TRUE:
+            case Tag.TRUE -> {
                 // <bexpr> -> true
                 match(Tag.TRUE);
                 code.emit(OpCode.GOto, ifTrue);
-                break;
+            }
 
-            case Tag.FALSE:
+            case Tag.FALSE -> {
                 // <bexpr> -> false
                 match(Tag.FALSE);
                 code.emit(OpCode.GOto, ifFalse);
-                break;
+            }
 
-            case Tag.AND :
+            case Tag.AND -> {
                 // <bexpr> -> &&<bexpr><bexpr>
                 match(Tag.AND);
                 int trueLabel = code.newLabel();
                 bexpr(trueLabel, ifFalse);
                 code.emit(OpCode.label, trueLabel);
                 bexpr(ifTrue, ifFalse);
-                break;
+            }
 
-            case Tag.OR:
+            case Tag.OR -> {
                 // <bexpr> -> ||<bexpr><bexpr>
                 match(Tag.OR);
                 int falseLabel = code.newLabel();
                 bexpr(ifTrue, falseLabel);
                 code.emit(OpCode.label, falseLabel);
                 bexpr(ifTrue, ifFalse);
-                break;
+            }
 
-            case '!':
+            case '!' -> {
                 // <bexpr> -> !<bexpr>
                 match('!');
                 bexpr(ifFalse, ifTrue);
-                break;
+            }
 
-            case '(':
+            case '(' -> {
                 // <bexpr> -> (<bexpr>)
                 match('(');
                 bexpr(ifTrue, ifFalse);
                 match(')');
-                break;
+            }
 
-            case Tag.RELOP:
+            case Tag.RELOP -> {
                 // <bexpr> -> RELOP<bexpr><bexpr>
                 Token tmpLook = look;
                 match(Tag.RELOP);
@@ -441,9 +439,9 @@ public class Translator {
                 expr();
                 code.emit(OpCode.getRelopOpCodeFromLexeme(tmpLook), ifTrue);
                 code.emit(OpCode.GOto, ifFalse);
-                break;
+            }
 
-            default: throw new ParserException("bexpr", look, lex.line);
+            default -> throw new ParserException("bexpr", look, lex.line);
         }
     }
 
@@ -454,6 +452,12 @@ public class Translator {
     public static void main(String[] args) {
         Lexer lex = new Lexer();
         String path = args[0];
+
+        if(args.length != 1) {
+            System.out.println("Usage: Transaltor PATH_FILE_TO_TRANSLATE");
+            System.exit(3);
+        }
+
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             Translator translator = new Translator(lex, br);

@@ -35,24 +35,24 @@ public class Lexer {
                     do {
                         readch(br);
                         switch(state) {
-                            case 0:
-                                if(peek == '*') state = 1;
-                                if(peek == '\n') line++;
+                            case 0 -> {
+                                if (peek == '*') state = 1;
+                                if (peek == '\n') line++;
                                 // else state = 0; qualunque altro carattere non altera lo
                                 // stato corrente. Il commento può infatti contenere quasiasi
                                 // carattere, compresi CR/LF, TAB e caratteri speciali
-                                break;
+                            }
 
-                            case 1:
-                                if(peek == '/') state = 2;
-                                else if(peek != '*') {
+                            case 1 -> {
+                                if (peek == '/') state = 2;
+                                else if (peek != '*') {
                                     state = 0;
-                                    if(peek == '\n') line++;
+                                    if (peek == '\n') line++;
                                 }
                                 // else state = 1; qualunque altro * letto fa permanere
                                 // il DFA nello stato corrente. Il primo * seguito da un
                                 // / determinerà la fine del commento
-                                break;
+                            }
                         }
                         // La condizione di uscita dal DFA è il raggiungimento dello stato
                         // 2, rappresentate la fine del commento (una sequenza */ è stata
@@ -80,43 +80,52 @@ public class Lexer {
         }
 
         switch (peek) {
-            case '!':
+            case '!' -> {
                 peek = ' ';
                 return Token.not;
+            }
 
-            case ';':
+            case ';' -> {
                 peek = ' ';
                 return Token.semicolon;
+            }
 
-            case '{':
+            case '{' -> {
                 peek = ' ';
                 return Token.lpg;
+            }
 
-            case '}':
+            case '}' -> {
                 peek = ' ';
                 return Token.rpg;
+            }
 
-            case '+':
+            case '+' -> {
                 peek = ' ';
                 return Token.plus;
+            }
 
-            case '-':
+            case '-' -> {
                 peek = ' ';
                 return Token.minus;
+            }
 
-            case '*':
+            case '*' -> {
                 peek = ' ';
                 return Token.mult;
+            }
 
-            case '(':
+            case '(' -> {
                 peek = ' ';
                 return Token.lpt;
+            }
 
-            case ')':
+            case ')' -> {
                 peek = ' ';
                 return Token.rpt;
+            }
 
-            case '&':
+            case '&' -> {
                 readch(br);
                 if (peek == '&') {
                     peek = ' ';
@@ -124,57 +133,63 @@ public class Lexer {
                 } else {
                     throw new LexerException("'&' is not an operator", line);
                 }
+            }
 
-            case '|':
+            case '|' -> {
                 readch(br);
-                if(peek == '|') {
+                if (peek == '|') {
                     peek = ' ';
                     return Word.or;
                 } else {
                     throw new LexerException("'|' is not an operator ", line);
                 }
+            }
 
-            case '>':
+            case '>' -> {
                 readch(br);
-                if(peek == '=') {
+                if (peek == '=') {
                     peek = ' ';
                     return Word.ge;
                 } else {
                     return Word.gt;
                 }
+            }
 
-            case '<':
+            case '<' -> {
                 readch(br);
-                if(peek == '=') {
+                if (peek == '=') {
                     peek = ' ';
                     return Word.le;
-                } else if(peek == '>') {
+                } else if (peek == '>') {
                     peek = ' ';
                     return Word.ne;
                 } else {
                     return Word.lt;
                 }
+            }
 
-            case '=':
+            case '=' -> {
                 readch(br);
-                if(peek == '=') {
+                if (peek == '=') {
                     peek = ' ';
                     return Word.eq;
                 } else {
                     return Token.assign;
                 }
+            }
 
-            case (char)-1:
+            case (char) -1 -> {
                 return new Token(Tag.EOF);
+            }
 
-            default:
+            default -> {
                 if (Character.isLetter(peek) || peek == '_') {
                     // Vengono considerati identificatori sequenze non vuote
                     // di lettere, numeri e il carattere underscore che non
                     // inizino con un numero
                     StringBuilder buf = new StringBuilder();
 
-                    while(peek == '_') {
+                    while (peek == '_') {
                         // Gli underscore iniziali vengono gestiti separatamente poichè una
                         // sequenza di underscore devrà essere seguita da un numero o da una
                         // lettera
@@ -182,11 +197,11 @@ public class Lexer {
                         readch(br);
                     }
 
-                    if(Character.isLetter(peek) || Character.isDigit(peek)) {
+                    if (Character.isLetter(peek) || Character.isDigit(peek)) {
                         do {
                             buf.append(peek);
                             readch(br);
-                        } while(Character.isLetter(peek) || Character.isDigit(peek) || peek == '_');
+                        } while (Character.isLetter(peek) || Character.isDigit(peek) || peek == '_');
                     } else {
                         // Sequenze di soli underscore non vengono accettate
                         throw new LexerException("Erroneous sequence for an identifier: '_' must be followed by a letter or a digit", line);
@@ -196,23 +211,23 @@ public class Lexer {
 
                     // Una sequenza di lettere può identificare anche identificare parole
                     // riservate del linguaggio, che rappresentano particolari istruzioni
-                    switch (s) {
-                        case "cond": return Word.cond;
-                        case "when": return Word.when;
-                        case "then": return Word.then;
-                        case "else": return Word.elsetok;
-                        case "while": return Word.whiletok;
-                        case "do": return Word.dotok;
-                        case "seq": return Word.seq;
-                        case "print": return Word.print;
-                        case "read": return Word.read;
-                        case "true": return Word.truetok;
-                        case "false": return Word.falsetok;
-                        default: return new Word(Tag.ID, s);
-                    }
+                    return switch (s) {
+                        case "cond" -> Word.cond;
+                        case "when" -> Word.when;
+                        case "then" -> Word.then;
+                        case "else" -> Word.elsetok;
+                        case "while" -> Word.whiletok;
+                        case "do" -> Word.dotok;
+                        case "seq" -> Word.seq;
+                        case "print" -> Word.print;
+                        case "read" -> Word.read;
+                        case "true" -> Word.truetok;
+                        case "false" -> Word.falsetok;
+                        default -> new Word(Tag.ID, s);
+                    };
 
                 } else if (Character.isDigit(peek)) {
-                    if(peek == '0') {
+                    if (peek == '0') {
                         // Nessun numero può essere preceduto da 0. Nell'implementazione
                         // corrente 0478 viene interpretato come due token, 0 e 478, in
                         // successione
@@ -226,37 +241,16 @@ public class Lexer {
                             // a sinistra e procedendo verso destra
                             num = num * 10 + (peek - '0');
                             readch(br);
-                        }while(Character.isDigit(peek));
+                        } while (Character.isDigit(peek));
 
                         return new NumberTok(num);
                     }
-                } else{
+                } else {
                     // Ogni carattere che non rientri in quelli ammessi nei precedenti casi
                     // non viene ammesso
                     throw new LexerException("Erroneous character, " + peek + " not recognised", line);
                 }
-        }
-    }
-
-    // Main utile per testare il funzionamento della classe Lexer
-    public static void main(String[] args) {
-        Lexer lex = new Lexer();
-        String path = "C:\\Users\\Andrea\\Documents\\unito\\lft\\Lab\\Esercizi\\Es05_traduttore\\Es05_02\\docs\\test\\lexer\\lex_test.txt"; // il percorso del file da leggere
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(path));
-            Token tok;
-
-            do {
-                tok = lex.lexical_scan(br);
-                System.out.println("Scan: " + tok);
-            } while (tok.tag != Tag.EOF);
-
-            br.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        } catch (LexerException le) {
-            System.err.println(le.toString());
+            }
         }
     }
 }

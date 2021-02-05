@@ -5,14 +5,14 @@ public enum OpCode {
     if_icmpgt, ifne, GOto, invokestatic, label;
 
     public static OpCode getRelopOpCodeFromLexeme(Token t) {
-        switch (((Word)t).lexeme) {
-            case "<" -> { return OpCode.if_icmplt; }
-            case ">" -> { return OpCode.if_icmpgt; }
-            case "==" -> { return OpCode.if_icmpeq; }
-            case ">=" -> { return OpCode.if_icmpge; }
-            case "<=" -> { return OpCode.if_icmple; }
-            case "<>" -> { return OpCode.if_icmpne; }
-            default -> { return null; }
-        }
+        return switch (((Word) t).lexeme) {
+            case "<" -> OpCode.if_icmplt;
+            case ">" -> OpCode.if_icmpgt;
+            case "==" -> OpCode.if_icmpeq;
+            case ">=" -> OpCode.if_icmpge;
+            case "<=" -> OpCode.if_icmple;
+            case "<>" -> OpCode.if_icmpne;
+            default -> null;
+        };
     }
 }
