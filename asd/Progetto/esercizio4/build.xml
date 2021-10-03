@@ -1,0 +1,72 @@
+<project name="esercizio4" basedir="." default="all">
+    <target name="init">
+        <property name="project.name" value="${ant.project.name}" />
+        <property location="libs" name="libs.dir" />
+        <property location="out" name="classes.dir" />
+        <property location="jar" name="jar.dir" />
+        <property location="src" name="src.dir" />
+        <property location="${libs.dir}/junit-4.12.jar" name="junit" />
+        <property location="${libs.dir}/hamcrest-core-1.3.jar" name="hamcrest-core" />
+    </target>
+
+    <target depends="init" name="clean">
+        <delete dir="${jar.dir}"/>
+        <delete dir="${classes.dir}" />
+    </target>
+
+    <target depends="init" name="compile">
+        <mkdir dir="${classes.dir}" />
+        <javac destdir="${classes.dir}" srcdir="${src.dir}" includeAntRuntime="false">
+            <classpath>
+                <pathelement location="${junit}" />
+                <pathelement location="${hamcrest-core}" />
+            </classpath>
+            <!-- <compilerarg value="-Xlint"/> -->
+        </javac>
+    </target>
+
+    <target depends="init" name="jar">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/Esercizio4_client.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="Client"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target depends="init" name="junit-Graph">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/Graph_Test.jar" basedir="${classes.dir}">
+            <zipgroupfileset dir="libs" includes="*.jar" excludes=""/>
+            <manifest>
+                <attribute name="Main-Class" value="graph/GraphTest_Runner"/>
+                <attribute name="Class-Path" value="${classpath}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target depends="init" name="junit-UnionFindSet">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/UnionFindSet_Test.jar" basedir="${classes.dir}">
+            <zipgroupfileset dir="libs" includes="*.jar" excludes=""/>
+            <manifest>
+                <attribute name="Main-Class" value="unionfindset/UnionFindSetTest_Runner"/>
+                <attribute name="Class-Path" value="${classpath}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target depends="init" name="junit-Kruskal">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/Kruskal_Test.jar" basedir="${classes.dir}">
+            <zipgroupfileset dir="libs" includes="*.jar" excludes=""/>
+            <manifest>
+                <attribute name="Main-Class" value="graph/KruskalTest_Runner"/>
+                <attribute name="Class-Path" value="${classpath}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target depends="init,compile,jar,junit-Graph,junit-UnionFindSet,junit-Kruskal" name="all" />
+
+</project>
