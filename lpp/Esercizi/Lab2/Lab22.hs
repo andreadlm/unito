@@ -13,3 +13,9 @@ bits :: Int -> Int
 bits n | n == 0 =  0
        | n `mod` 2 == 0 = bits (n `div` 2)
        | n `mod` 2 == 1 = bits (n `div` 2) + 1
+
+-- Es4
+potenzaDi2 :: Int -> Bool
+potenzaDi2 n | n == 1 = True
+             | n `mod` 2 /= 0 = False
+             | otherwise = potenzaDi2 (n `div` 2)
