@@ -1,0 +1,56 @@
+body {
+    width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #ffffff;
+    font-family: "Georgia", "Garamond", serif;
+    color: #404040;
+    font-size: 11pt;
+}
+
+#title-box {
+    text-align: center;
+}
+
+#title-ACME {
+    font-size: 2em;
+    color:#ff0000;
+}
+
+#title-CORPORATION {
+    font-size: 1.2em;
+}
+
+#title-box > strong {
+    font-size: 1.5em;
+    text-transform: capitalize;
+
+}
+
+blockquote {
+    background-color: #edeff2;
+}
+
+.cite-name {
+    font-style: italic;
+    font-weight: bold;
+}
+
+#attention {
+    font-size: 0.5em;
+    text-align: center;
+}
+
+#attention > strong {
+    color: red;
+}
+
+#logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a {
+    color: #ff0000;
+}
