@@ -6,6 +6,8 @@ body {
     font-family: "Georgia", "Garamond", serif;
     color: #404040;
     font-size: 11pt;
+    background-image: url(img/background.png);
+    background-attachment: fixed;
 }
 
 #title-box {

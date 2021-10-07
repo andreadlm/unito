@@ -6,12 +6,19 @@ body {
     font-family: "Georgia", "Garamond", serif;
     color: #404040;
     font-size: 11pt;
+    background-image: url(img/background.png);
+    background-attachment: fixed;
 }
 
 h1, h2, h3 {
     color: #a4a400;
-    background-color: hsl(0, 0%, 94%);
     font-family: "Lucida Sans Unicode", "Helvetica", "Arial", sans-serif;
+    text-decoration: underline;
+    letter-spacing: 0.25em;
+}
+
+h1 > span, h2 > span, h3 > span {
+    background-color: #f0f0f0;
 }
 
 h1 {
@@ -23,10 +30,13 @@ h1 {
 h2, h3 {
     text-align: left;
     font-size: 18pt;
-    text-decoration: underline;
 }
 
 a {
     color: #a4a400;
 }
 
+
+#img-box {
+    text-align: right;
+}

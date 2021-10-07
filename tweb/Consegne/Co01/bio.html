@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
     <head>
         <title>Profilo di Bugs Bunny</title>
         <link rel="stylesheet" href="bio.css">
+        <link href="img/icon.gif" type="image/gif" rel="shortcut icon">
         <meta charset="UTF-8">
         <meta name="description" content="Profilo di Bugs Bunny">
         <meta name="Author" content="Andrea Delmastro">
     </head>
     <body>
-        <h1>Profilo di Bugs Bunny</h1>
-        <h2>Sezioni</h2>
+        <h1><span>Profilo di Bugs Bunny</span></h1>
+        <h2><span>Sezioni</span></h2>
         <ol>
             <li><a href="#dati">Dati personali</a></li>
             <li><a href="#competenze">Competenze informatiche</a></li>
@@ -18,8 +19,10 @@
             <li><a href="#links">Links</a></li>
         </ol>
 
-        <h3><a id="dati">Dati personali</a></h3>
-        <img id="profile-pic" src="https://static.wikia.nocookie.net/looneytunes/images/b/ba/BD1DC604-0990-445E-A75E-3E2CB91741EF.png/revision/latest/top-crop/width/360/height/360?cb=20201206015718" width="240px" height="240px" align="right">
+        <h3><span><a id="dati">Dati personali</a></span></h3>
+        <div id="img-box">
+            <img id="profile-pic" alt="profile pic" src="https://static.wikia.nocookie.net/looneytunes/images/b/ba/BD1DC604-0990-445E-A75E-3E2CB91741EF.png/revision/latest/top-crop/width/360/height/360?cb=20201206015718" width="240" height="240">
+        </div>
         <ul>
             <li><strong>Nome:</strong> George Washington</li>
             <li><strong>Cognome:</strong> Bunny</li>
@@ -34,31 +37,37 @@
         <p>Le sue fattezze da coniglio non dovrebbero ingannare, nonostante l'aspetto all'apparenza innocuo, è in realtà profondamente malvagio. Ciò rende i suoi prodotti i più efficaci all'interno di contesti
            dove tranelli, inganni, esplosioni sono necessari.
         </p>
+        <hr>
 
-        <h3><a id="competenze">Competenze informatiche</a></h3>
+        <h3><span><a id="competenze">Competenze informatiche</a></span></h3>
         Le conoscenze decenalli di Bugs Bunny nel campo si sono evolute e nel tempo e oggi si applicano in particolar modo al settore informatico, permettendo lo sviluppo di soluzione tencologicamente all'avanguardia.
         <ul>
-            <li>Linguaggi di programmazione</li>
-            <ul>
-                <li>C</li>
-                <li>Java</li>
-                <li>Haskell</li>
-                <li><abbr title="Structured Query Language">SQL</abbr></li>
-                <li><abbr title="Hypertext Markup Language">HTML</abbr></li>
-            </ul>
-            <li>Sistemi operativi</li>
-            <ul>
-                <li>🥕 CarrotOS X</li>
-                <li>🐰 Rabbux</li>
-            </ul>
-            <li>Ambienti di sviluppo</li>
-            <ul>
-                <li>Emacs</li>
-                <li>Vim</li>
-            </ul>
+            <li>
+                Linguaggi di programmazione
+                <ul>
+                    <li>C</li>
+                    <li>Java</li>
+                    <li>Haskell</li>
+                    <li><abbr title="Structured Query Language">SQL</abbr></li>
+                    <li><abbr title="Hypertext Markup Language">HTML</abbr></li>
+                </ul>
+            </li>
+            <li>Sistemi operativi
+                <ul>
+                    <li>🥕 CarrotOS X</li>
+                    <li>🐰 Rabbux</li>
+                </ul>
+            </li>
+            <li>Ambienti di sviluppo
+                <ul>
+                    <li>Emacs</li>
+                    <li>Vim</li>
+                </ul>
+            </li>
         </ul>
+        <hr>
 
-        <h3><a id="esperienze">Esperienze di lavoro</a></h3>
+        <h3><span><a id="esperienze">Esperienze di lavoro</a></span></h3>
         <p>Bugs Bunny si è distinto per un ampia gavetta all'interno dei settori più disparati prima di fondare ACME Corporation.</p>
         <ol>
             <li>Parrucchiere presso Barber Bugs</li>
@@ -66,7 +75,7 @@
             <li>CEO presso ACME Corporation</li>
         </ol>
 
-        <h3><a id="interessi">Interessi personali</a></h3>
+        <h3><span><a id="interessi">Interessi personali</a></span></h3>
         <dl>
             <dt>Baseball</dt>
             <dd>Sport di squadra in cui due squadre composte da nove giocatori si affrontano per nove inning (o riprese) in ciascuno dei quali le due squadre si alternano nella fase di attacco e di difesa.</dd>
@@ -75,8 +84,23 @@
             <dt>Scherzare e divertirsi</dt>
             <dd>Bugs Bunny è un vero spasso! Ama scherzare con i suoi amici e divertirsi ogni giorno.</dd>
         </dl>
+        <hr>
 
-        <h3><a id="links">Links</a></h3>
-        <a href="./index.html">Torna alla home</a>
+        <h3><span><a id="links">Links</a></span></h3>
+        <ul>
+            <li><a href="https://www.instagram.com/looneytunes">Instagram</a></li>
+            <li><a href="./index.html">Torna alla home</a></li>
+        </ul>
+        <hr>
+
+        <p>
+            <a href="http://validator.w3.org/check/referer">
+            <img width="88" src="https://upload.wikimedia.org/wikipedia/commons/b/bb/W3C_HTML5_certified.png "
+            alt="Valid HTML5!"> 
+            </a>
+
+            <a href="http://jigsaw.w3.org/css-validator/check/referer">
+            <img src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!" ></a>
+        </p>
     </body>
 </html>
