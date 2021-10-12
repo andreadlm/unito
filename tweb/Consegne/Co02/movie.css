@@ -1,0 +1,132 @@
+body {
+    background-image: url("http://courses.cs.washington.edu/courses/cse190m/11sp/homework/2/background.png");
+    background-repeat: repeat;
+    font-family: Verdana, Tahoma, sans-serif;
+    font-size: 8pt;
+    padding: 0;
+    margin: 0;
+}
+
+#header {
+    background-image: url("https://courses.cs.washington.edu/courses/cse190m/11sp/homework/2/bannerbg.png");
+    background-repeat: repeat-x;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24pt;
+    font-family: Tahoma, Verdana, sans-serif;
+    text-shadow: 3px 3px #999999;
+    text-align: center;
+}
+
+#content {
+    width: 800px;
+    margin: auto;
+    border: solid 4px gray;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#side {
+    float: right;
+    width: 250px;
+    font-family: Arial, sans-serif;
+}
+
+#side dl {
+    padding: 10pt;
+    margin: 0;
+}
+
+#side dt {
+    font-weight: bold;
+}
+
+#side dd {
+    margin-bottom: 10pt;
+}
+
+#side ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#article {
+    width: 550px;
+}
+
+#score {
+    background-image: url("https://courses.cs.washington.edu/courses/cse190m/11sp/homework/2/rbg.png");
+    background-repeat: repeat-x;
+    font-size: 48pt;
+    color: red;
+    font-weight: bold;
+}
+
+#score img {
+    vertical-align: text-bottom;
+}
+
+#article-left {
+    width: 47%;
+    float: left;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+#article-right {
+    width: 47%;
+    float: right;
+    margin-right: 2%;
+}
+
+#content-footer {
+    clear: right;
+}
+
+.review {
+    font-weight: bold;
+    font-size: 8pt;
+    background-color: #e8dc9b;
+    border: 2px solid grey;
+    border-radius: 10px;
+    padding: 8px;
+    overflow: hidden;
+}
+
+.review > img {
+    float: left;
+    margin-right: 5px;
+}
+
+.reviewer {
+    overflow: hidden;
+    margin-bottom: 20pt;
+}
+
+.reviewer > img {
+    float: left;
+    margin-right: 5px;
+}
+
+.publication {
+    font-style: italic;
+}
+
+#content-footer {
+    text-align: center;
+    padding: 5px;
+    margin: 0;
+}
+
+#validators {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    opacity: 0.5;
+}
+
+.bg-green {
+    background-color: #a2b964;
+}
