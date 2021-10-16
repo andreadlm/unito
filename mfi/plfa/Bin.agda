@@ -1,10 +1,11 @@
-module Bin where
-
-open import Naturals
+module plfa.Bin where
 
 import Relation.Binary.PropositionalEquality as Eq
-open Eq using (_≡_; refl)
-open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; _∎)
+open Eq using (_≡_; refl; cong; sym)
+open Eq.≡-Reasoning using (begin_; _≡⟨⟩_; step-≡; _∎)
+open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_)
+
+open import plfa.Induction
 
 data Bin : Set where
   ⟨⟩ : Bin
@@ -36,3 +37,41 @@ from : Bin → ℕ
 from ⟨⟩    = 0
 from (b O) = 2 * (from b)
 from (b I) = 2 * (from b) + 1
+
+law₁ : ∀ (b : Bin) → from (inc b) ≡ suc (from b)
+law₁ ⟨⟩ = 
+  begin
+    from (inc ⟨⟩)
+  ≡⟨⟩
+    from (⟨⟩ I)
+  ≡⟨⟩
+    2 * (from ⟨⟩) + 1
+  ≡⟨⟩
+    suc (2 * from ⟨⟩)
+  ≡⟨⟩
+    suc (2 * zero)
+  ≡⟨⟩
+    suc zero
+  ≡⟨⟩
+    suc (from ⟨⟩)
+  ∎
+law₁ (b O) =
+  begin
+    from (inc (b O))
+  ≡⟨⟩
+    from (b I)
+  ≡⟨⟩
+    2 * (from b) + 1
+  ≡⟨⟩
+    from (b O) + 1
+  ≡⟨⟩
+    from (b O) + suc zero
+  ≡⟨ +-comm (from (b O)) (suc zero) ⟩
+    suc zero + from (b O)
+  ≡⟨⟩
+    suc (zero + from (b O))
+  ≡⟨⟩
+    suc (from (b O))
+  ∎
+
+-- Completare
