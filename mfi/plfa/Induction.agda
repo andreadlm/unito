@@ -49,6 +49,24 @@ open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_)
 +-identityᵣ′ zero                           = refl
 +-identityᵣ′ (suc m) rewrite +-identityᵣ′ m = refl
 
+*-identityᵣ : ∀ (m : ℕ) → m * zero ≡ zero
+*-identityᵣ zero =
+  begin
+    zero * zero
+  ≡⟨⟩
+    zero
+  ∎
+*-identityᵣ (suc m) =
+  begin
+    (suc m) * zero
+  ≡⟨⟩
+    zero + (m * zero)
+  ≡⟨ cong (zero +_) (*-identityᵣ m) ⟩
+    zero + zero
+  ≡⟨⟩
+    zero
+  ∎
+
 +-suc : ∀ (m n : ℕ) → m + suc n ≡ suc (m + n)
 +-suc zero n = 
   begin
@@ -163,8 +181,4 @@ open import Data.Nat using (ℕ; zero; suc; _+_; _*_; _∸_)
     (n + m * n) * p
   ≡⟨⟩
     (suc m * n) * p
-  ∎
-    
-
-
-    
+  ∎ 

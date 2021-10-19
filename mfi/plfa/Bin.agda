@@ -38,6 +38,24 @@ from ⟨⟩    = 0
 from (b O) = 2 * (from b)
 from (b I) = 2 * (from b) + 1
 
+law₁-lemma : ∀ (n : ℕ) → suc n ≡ n + 1
+law₁-lemma zero =
+  begin
+    suc zero
+  ≡⟨⟩
+    zero + suc zero
+  ≡⟨⟩
+    zero + 1
+  ∎
+law₁-lemma (suc m) =
+  begin
+    suc (suc m)
+  ≡⟨ cong suc (law₁-lemma m) ⟩
+    suc (m + 1)
+  ≡⟨⟩
+    (suc m) + 1
+  ∎
+
 law₁ : ∀ (b : Bin) → from (inc b) ≡ suc (from b)
 law₁ ⟨⟩ = 
   begin
