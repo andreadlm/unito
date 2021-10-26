@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #required-set > input:invalid {
+        background-color: red;
+      }
+
+      #required-set > input:valid {
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="../Generic/params.php" method="post">
+      <fieldset id="required-set">
+        <legend>Login Informatica</legend>
+        <strong>username: </strong><input name="username" required><br>
+        <strong>email: </strong><input name="email" value="joe@example.com" required><br>
+        <strong>password: </strong><input name="password" required><br>
+        <strong>repeat your password: </strong><input name ="passwordr" required><br>
+      </fieldset>
+      <fieldset>
+        <legend>Additional information</legend>
+        <strong>full name: </strong><input name="fullname"><br>
+        <strong>birth date: </strong><input type="date" name="birthdate"><br>
+        <strong>favourite donald's nephew: </strong>
+          <input type="radio" name="nephew" value="Huey"> Huey
+          <input type="radio" name="nephew" value="Dewey"> Dewey
+          <input type="radio" name="nephew" value="Louie"> Louie
+        <br>
+        <strong>favourite food: </strong>
+          <select name="favfood">
+            <option>Pizza</option>
+            <option>Pasta</option>
+            <option>Bagna cauda</option>
+          </select>
+        <br>
+        <strong>your picture:</strong><input type="file" name="pic" size="60"><br>
+      </fieldset>
+      <fieldset>
+        <legend>Complete your subscription</legend>
+        <input type="reset">
+        <input type="submit" value="Sign in">
+      </fieldset>
+    </form>
+  </body>
+</html>
