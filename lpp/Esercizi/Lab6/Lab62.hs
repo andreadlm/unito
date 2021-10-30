@@ -3,7 +3,7 @@ data ForseInt = Niente | Proprio Int
   deriving Show
 
 testa :: [Int] -> ForseInt
-testa [] = Niente
+testa []      = Niente
 testa (x : _) = Proprio x
 
 -- Es2
@@ -22,6 +22,6 @@ sommatoria = foldr somma (I 0)
 
 -- Es4
 proprio :: [ForseInt] -> [Int]
-proprio []                = []
+proprio []               = []
 proprio (Niente : xs)    = proprio xs
 proprio (Proprio x : xs) = x : proprio xs

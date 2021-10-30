@@ -2,9 +2,9 @@
 data PuntoCardinale = Nord | Sud | Est | Ovest
 
 sinistra :: PuntoCardinale -> PuntoCardinale
-sinistra Nord = Est
-sinistra Sud = Ovest
-sinistra Est = Sud
+sinistra Nord  = Est
+sinistra Sud   = Ovest
+sinistra Est   = Sud
 sinistra Ovest = Nord
 
 indietro :: PuntoCardinale -> PuntoCardinale
