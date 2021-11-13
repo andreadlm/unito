@@ -6,7 +6,7 @@ import java.util.Random;
 public class Model extends Observable {
   private final List<String> proverbs;
   private int currProverbIdx;
-  private Random randomGen;
+  private final Random randomGen;
 
   public Model() {
     proverbs = new ArrayList<>();

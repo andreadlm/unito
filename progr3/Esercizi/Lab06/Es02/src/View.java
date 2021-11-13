@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -13,6 +12,7 @@ public class View extends JFrame implements Observer {
     JPanel panel = new JPanel();
     add(panel);
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
     button = new JButton("New proverb");
     panel.add(button);
