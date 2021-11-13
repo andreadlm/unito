@@ -1,12 +1,23 @@
 import java.util.Observable;
 
 public class Counter extends Observable {
+  private int val;
+  private int start;
+  private int end;
+
+  public Counter(int start, int end) {
+    this.start = start;
+    this.end = end;
+  }
+
+  public int getVal() {
+    return val;
+  }
+
   public void start() {
-    for(int i = 0; i < 50; i++) {
-      if(i % 5 == 0) {
-        setChanged();
-        notifyObservers(i);
-      }
+    for(val = start; val < end; val++) {
+      setChanged();
+      notifyObservers();
     }
   }
 }

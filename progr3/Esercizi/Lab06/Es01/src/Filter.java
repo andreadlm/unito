@@ -1,22 +1,22 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 
-public class Filter extends Observable implements Observer{
+public class Filter extends Observable {
   private List<Integer> list;
 
   public Filter() {
     list = new ArrayList<>();
   }
+  public List<Integer> getList() {
+    return list;
+  }
 
-  @Override
-  public void update(Observable o, Object arg) {
-    if(arg instanceof Integer) {
-      list.add((Integer)arg);
-      if(list.size() % 2 == 0)
-        setChanged();
-        notifyObservers(list);
+  public void add(Integer i) {
+    if(i % 5 == 0) {
+      list.add(i);
+      setChanged();
+      notifyObservers();
     }
   }
 }

@@ -1,12 +1,11 @@
 public class Main {
   public static void main(String[] args) {
-    Counter c = new Counter();
-    Filter f = new Filter();
-    Visualizer v = new Visualizer();
+    Counter counter = new Counter(0, 50);
+    Filter filter = new Filter();
+    Visualizer visualizer = new Visualizer();
 
-    f.addObserver(v);
-    c.addObserver(f);
+    Controller controller = new Controller(counter, filter, visualizer);
 
-    c.start();
+    controller.start();
   }
 }
