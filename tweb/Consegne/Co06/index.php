@@ -10,9 +10,9 @@
             <!--
             <p>Welcome <span id="username"></span>!</p>
             -->
-            <h1>The One Degree of Kevin Bacon</h1>
-            <p>Type in an actor's name to see if he/she was ever in a movie with Kevin Bacon!</p>
-            <p><img id="kevinphoto" src="img/kevin_bacon.jpg" alt="Kevin Bacon"></p>
+            <h1>The One Degree of Massimo Boldi</h1>
+            <p>Type in an actor's name to see if he/she was ever in a movie with Massimo Boldi!</p>
+            <p><img id="massimophoto" src="img/massimo_boldi.jpg" alt="Massimo Boldi"></p>
 
             <!-- ErrMsg: actor not in our database or actor with no films in our data base -->
             <div id="errMsg"></div>
@@ -30,7 +30,7 @@
                     </tr>
 
                 </table>
-            </div>              
+            </div>
 
 <?php include("bottom.html"); 
     

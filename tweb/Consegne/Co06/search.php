@@ -8,15 +8,18 @@ $dbPassword = 'password';
 try {
     $db = new PDO($dbConnectionString, $dbUser, $dbPassword);
 } catch(PDOException $PDOe) {
-    error('Unable to connect to the database', $PDOe);
+    error('Unable to connect to the database');
 }
 
-if($_SERVER['REQUEST_METHOD'] != 'GET') {
-    error('Request method must be GET', '');
+if($_SERVER['REQUEST_METHOD'] != 'POST') {
+    error('Request method must be POST');
 } else {
-    $firstName = $_GET['first_name'];
-    $lastName = $_GET['last_name'];
-    $allFlag = $_GET['all'];
+    if(!isset($_POST['first_name'])) error('first_name not set');
+    else $firstName = $_POST['first_name'];
+    if(!isset($_POST['last_name'])) error('last_name not set');
+    else $lastName = $_POST['last_name'];
+    if(!isset($_POST['all'])) error('all not set');
+    else $allFlag = $_POST['all'];
 
     $allQuery = 'SELECT movies.name,
                         movies.year
@@ -48,7 +51,7 @@ if($_SERVER['REQUEST_METHOD'] != 'GET') {
             if($id != null)
                 $query->execute(array(':id' => $id));
             else
-                error('Actor does not exist', '');
+                error('Actor does not exist');
         } else {
             $query = $db->prepare($withActorQuery);
             $id_2 = getActorID($firstName, $lastName);
@@ -56,15 +59,14 @@ if($_SERVER['REQUEST_METHOD'] != 'GET') {
                 $query->execute(array(':id_1' => getActorID('Massimo', 'Boldi'),
                                       ':id_2' => $id_2));
             else
-                error('Actor does not exist', '');
+                error('Actor does not exist');
         }
 
         $rows = $query->fetchAll(PDO::FETCH_ASSOC);
     } catch(PDOException $PDOe) {
-        error('Unable to retrieve data from database', $PDOe);
+        error('Unable to retrieve data from database');
     }
 
-    echo getActorID($firstName, $lastName);
     echo json_encode($rows);
 }
 
@@ -84,8 +86,7 @@ function getActorID($firstName, $lastName) {
     return $idRow != false ? $idRow['id'] : null;
 }
 
-function error($message, $error) {
-    echo json_encode(array('message' => $message,
-                           'error' => $error));
+function error($error) {
+    echo json_encode(array('error' => $error));
     exit(-1);
 }
