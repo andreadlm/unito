@@ -13,9 +13,13 @@ body {
     margin: 2em auto;
 }
 
-#massimophoto, fieldset {
+#massimophoto, fieldset, #errMsg {
     width: 40%;
     margin: auto;
+}
+
+fieldset {
+    margin-top: 1em;
 }
 
 legend {
@@ -31,4 +35,25 @@ legend {
 #banner {
     color: #ffffff;
     font-weight: bold;
+}
+
+#list {
+    width: 60%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.evenRow, .oddRow {
+    border: 1px solid #b1b1ac;
+}
+
+.evenRow {
+    background-color: #dad9d4;
+}
+
+#errMsg > div {
+    background-color: #ff6060;
+    color: white;
+    font-weight: bold;
+    padding: 0.5em;
 }

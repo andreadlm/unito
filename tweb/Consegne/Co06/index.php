@@ -18,18 +18,6 @@
             <div id="errMsg"></div>
             <!-- results: no error, results (all movies with Kevin Bacon) follow here -->
             <div id="results">
-                <h2>Results for <span id="firstN"></span> <span id="lastN"></span></h2>
-                <table id="list">
-                    <caption>
-                        All Films below
-                    </caption>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Year</th>
-                    </tr>
-
-                </table>
             </div>
 
 <?php include("bottom.html"); 

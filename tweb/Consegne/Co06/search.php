@@ -30,19 +30,18 @@ if($_SERVER['REQUEST_METHOD'] != 'POST') {
                  ORDER BY movies.year DESC, 
                           movies.name ASC';
 
-    $withActorQuery = 'SELECT movies.name,
-                              movies.year
-                       FROM (actors actors1,
-                             actors actors2)
-                           JOIN roles roles1 ON actors1.id = roles1.actor_id
-                           JOIN roles roles2 ON actors2.id = roles2.actor_id
-                           JOIN movies ON roles1.movie_id = movies.id
-                       WHERE actors1.id != actors2.id AND
-                             roles1.movie_id = roles2.movie_id AND
-                             actors1.id = :id_1 AND
-                             actors2.id = :id_2
-                       ORDER BY movies.year DESC, 
-                                movies.name ASC';
+    $withActorQuery = 'WITH common_movies AS (    
+                               SELECT roles.movie_id
+                               FROM roles
+                               WHERE roles.actor_id = :id_2
+                          INTERSECT
+                               SELECT roles.movie_id
+                               FROM roles
+                               WHERE roles.actor_id = :id_1
+                      )
+                      SELECT movies.name, movies.year
+                      FROM movies 
+                          JOIN common_movies ON movies.id = common_movies.movie_id';
 
     try {
         if ($allFlag == 'true') {

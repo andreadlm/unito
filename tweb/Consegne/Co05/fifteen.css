@@ -1,0 +1,169 @@
+body {
+    font-family: "Comic Sans MS", serif;
+    text-align: center;
+}
+
+#puzzlearea { /* TODO: utile? */
+    width: 400px;
+    height: 400px;
+    position: relative;
+    margin: auto;
+}
+
+#puzzlearea > div {
+    width: 90px;
+    height: 90px;
+    text-align: center;
+    line-height: 100px;
+    display: inline-block;
+    position: absolute;
+    background-image: url("buongiornissimo.png");
+    border: 10px solid rgb(280, 0, 161);
+    font-weight: bolder;
+    font-size: 40px;
+    color: rgb(280, 0, 161);
+}
+
+#puzzlearea > div:hover {
+    background-image: linear-gradient(0deg, rgba(244, 0, 161, 0.3), rgba(244, 0, 161, 0.3)), url(buongiornissimo.png);
+}
+
+#tile_1 {
+    background-position: 0 0;
+}
+
+.pos_1_1 {
+    top: 0;
+    left: 0;
+}
+
+#tile_2 {
+    background-position: -100px 0;
+}
+
+.pos_1_2 {
+    top: 0;
+    left: 100px;
+}
+
+#tile_3 {
+    background-position: -200px 0;
+}
+
+.pos_1_3 {
+    top: 0;
+    left: 200px;
+}
+
+#tile_4 {
+    background-position: -300px 0;
+}
+
+.pos_1_4 {
+    top: 0;
+    left: 300px;
+}
+
+#tile_5 {
+    background-position: 0 -100px;
+}
+
+.pos_2_1 {
+    top: 100px;
+    left: 0;
+}
+
+#tile_6 {
+    background-position: -100px -100px;
+}
+
+.pos_2_2 {
+    top: 100px;
+    left: 100px;
+}
+
+#tile_7 {
+    background-position: -200px -100px;
+}
+
+.pos_2_3 {
+    top: 100px;
+    left: 200px;
+}
+
+#tile_8 {
+    background-position: -300px -100px;
+}
+
+.pos_2_4 {
+    top: 100px;
+    left: 300px;
+}
+
+#tile_9 {
+    background-position: 0 -200px;
+}
+
+.pos_3_1 {
+    top: 200px;
+    left: 0;
+}
+
+#tile_10 {
+    background-position: -100px -200px;
+}
+
+.pos_3_2 {
+    top: 200px;
+    left: 100px;
+}
+
+#tile_11 {
+    background-position: -200px -200px;
+}
+
+.pos_3_3 {
+    top: 200px;
+    left: 200px;
+}
+
+#tile_12 {
+    background-position: -300px -200px;
+}
+
+.pos_3_4 {
+    top: 200px;
+    left: 300px;
+}
+
+#tile_13 {
+    background-position: 0 -300px;
+}
+
+.pos_4_1 {
+    top: 300px;
+    left: 0;
+}
+
+#tile_14 {
+    background-position: -100px -300px;
+}
+
+.pos_4_2 {
+    top: 300px;
+    left: 100px;
+}
+
+#tile_15 {
+    background-position: -200px -300px;
+}
+
+.pos_4_3 {
+    top: 300px;
+    left: 200px;
+}
+
+.pos_4_4 {
+    top: 300px;
+    left: 300px;
+}
