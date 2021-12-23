@@ -318,32 +318,13 @@ preservation-aval : ∀{Γ a s τ v} -- Nipkow 9.2
 -- Esercizio: dimostrare il lemma preservation-aval
 ---------------------------------------------------
 
-preservation-aval 
-  {τ = .Ity} {v = .(Iv i)} 
-  taexpI 
-  Γ⊢ₛs 
-  (tavalI {i = i}) = 
-    begin type (Iv i) ≡⟨⟩ Ity ∎
-
-preservation-aval 
-  {τ = .Rty} {v = .(Rv r)} 
-  taexpR 
-  Γ⊢ₛs 
-  (tavalR {r = r}) = 
-    begin type (Rv r) ≡⟨⟩ Rty ∎
-
-preservation-aval 
-  {Γ = Γ} {a = .(V x)} {τ = .(Γ x)} {v = .(s x)} 
-  taexpV 
-  Γ⊢ₛs 
-  (tavalV {x} {s}) = 
+preservation-aval {τ = .Ity} {v = .(Iv i)} taexpI Γ⊢ₛs (tavalI {i = i}) = 
+  begin type (Iv i) ≡⟨⟩ Ity ∎
+preservation-aval {τ = .Rty} {v = .(Rv r)} taexpR Γ⊢ₛs (tavalR {r = r}) = 
+  begin type (Rv r) ≡⟨⟩ Rty ∎
+preservation-aval {Γ} {.(V x)} {_} {.(Γ x)} {.(s x)} taexpV Γ⊢ₛs (tavalV {x} {s}) = 
     Γ⊢ₛs x
-
-preservation-aval 
-  {τ = τ} {v = .(Iv (i₁ +ᵢ i₂))} 
-  (taexpP Γ⊢ₐa₁∷τ Γ⊢ₐa₂∷τ) 
-  Γ⊢ₛs 
-  (tavalSI {i₁ = i₁} {i₂ = i₂} taval_a₁sv₁ taval_a₂sv₂) = 
+preservation-aval {τ = τ} {v = .(Iv (i₁ +ᵢ i₂))} (taexpP Γ⊢ₐa₁∷τ Γ⊢ₐa₂∷τ) Γ⊢ₛs (tavalSI {i₁ = i₁} {i₂ = i₂} taval_a₁sv₁ taval_a₂sv₂) = 
     begin
       type (Iv (i₁ +ᵢ i₂))
     ≡⟨⟩
@@ -351,12 +332,7 @@ preservation-aval
     ≡⟨ preservation-aval Γ⊢ₐa₁∷τ Γ⊢ₛs taval_a₁sv₁ ⟩ 
       τ
     ∎
-
-preservation-aval 
-  {τ = τ} {v = .(Rv (r₁ +ᵣ r₂))} 
-  (taexpP Γ⊢ₐa₁∷τ Γ⊢ₐa₂∷τ) 
-  Γ⊢ₛs 
-  (tavalSR {r₁ = r₁} {r₂ = r₂} taval_a₁sv₁ taval_a₂sv₂) = 
+preservation-aval {τ = τ} {v = .(Rv (r₁ +ᵣ r₂))} (taexpP Γ⊢ₐa₁∷τ Γ⊢ₐa₂∷τ) Γ⊢ₛs (tavalSR {r₁ = r₁} {r₂ = r₂} taval_a₁sv₁ taval_a₂sv₂) = 
     begin
       type (Rv (r₁ +ᵣ r₂))
     ≡⟨⟩
@@ -457,41 +433,18 @@ preservation-com : ∀{Γ c s c′ s′}     -- Nipkow 9.5
 --                               y : Γ ⊢ c
 ---------------------------------------------------------
 
-preservation-com 
-  {c′ = .SKIP} 
-  (Loc taval_asv) 
-  (TLoc  Γ⊢ₐa∷Γx) = 
-    TSkip
-
-preservation-com 
-  {c′ = .c₂} 
-  (Comp₁ {c = .c₂})
-  (TSeq {c₁ = .SKIP} {c₂ = c₂} Γ⊢c₁ Γ⊢c₂) = 
-    Γ⊢c₂
-
-preservation-com 
-  {c′ = .(c₁′ :: c₂)} 
-  (Comp₂ {c₁ = .c₁} {c₁′ = c₁′} ⦅c₁,s⦆→⦅c₁′,s′⦆) 
-  (TSeq {c₁ = c₁} {c₂ = c₂} Γ⊢c₁ Γ⊢c₂) = 
-    TSeq (preservation-com ⦅c₁,s⦆→⦅c₁′,s′⦆ Γ⊢c₁) Γ⊢c₂
-
-preservation-com 
-  {c′ = .c₁}
-  (IfTrue {c₁ = .c₁} {c₂ = .c₂} tbval_bsT) 
-  (TIf {c₁ = c₁} {c₂ = c₂} Γ⊢b Γ⊢c₁ Γ⊢c₂) = 
-    Γ⊢c₁
-
-preservation-com
-  {c′ = .c₂}
-  (IfFalse {c₁ = .c₁} {c₂ = .c₂} tbval_bsF) 
-  (TIf {c₁ = c₁} {c₂ = c₂} Γ⊢b Γ⊢c₁ Γ⊢c₂) = 
-    Γ⊢c₂
-
-preservation-com 
-  {c′ = .(IF b THEN (c :: (WHILE b DO c)) ELSE SKIP)} 
-  (While {b = .b} {c = .c}) 
-  (TWhile {b = b} {c = c} Γ⊢b Γ⊢c) = 
-    TIf Γ⊢b (TSeq Γ⊢c (TWhile Γ⊢b Γ⊢c)) TSkip
+preservation-com {c′ = .SKIP} (Loc taval_asv) (TLoc  Γ⊢ₐa∷Γx) = 
+  TSkip
+preservation-com {c′ = .c₂} (Comp₁ {c = .c₂}) (TSeq {c₁ = .SKIP} {c₂ = c₂} Γ⊢c₁ Γ⊢c₂) = 
+  Γ⊢c₂
+preservation-com {c′ = .(c₁′ :: c₂)} (Comp₂ {c₁ = .c₁} {c₁′ = c₁′} ⦅c₁,s⦆→⦅c₁′,s′⦆) (TSeq {c₁ = c₁} {c₂ = c₂} Γ⊢c₁ Γ⊢c₂) = 
+  TSeq (preservation-com ⦅c₁,s⦆→⦅c₁′,s′⦆ Γ⊢c₁) Γ⊢c₂
+preservation-com {c′ = .c₁} (IfTrue {c₁ = .c₁} {c₂ = .c₂} tbval_bsT) (TIf {c₁ = c₁} {c₂ = c₂} Γ⊢b Γ⊢c₁ Γ⊢c₂) = 
+  Γ⊢c₁
+preservation-com {c′ = .c₂} (IfFalse {c₁ = .c₁} {c₂ = .c₂} tbval_bsF) (TIf {c₁ = c₁} {c₂ = c₂} Γ⊢b Γ⊢c₁ Γ⊢c₂) = 
+  Γ⊢c₂
+preservation-com {c′ = .(IF b THEN (c :: (WHILE b DO c)) ELSE SKIP)} (While {b = .b} {c = .c}) (TWhile {b = b} {c = c} Γ⊢b Γ⊢c) = 
+  TIf Γ⊢b (TSeq Γ⊢c (TWhile Γ⊢b Γ⊢c)) TSkip
 
 
 preservation-state : ∀{Γ c s c′ s′} -- Nipkow 9.6
@@ -546,17 +499,16 @@ either-skip (WHILE x DO c) = inj₂ (λ ())
 
 
 
-postulate
-  progress : ∀{Γ c s}
+progress : ∀{Γ c s}
 -- se
-    → Γ ⊢  c
-    → Γ ⊢ₛ s
-    → ¬ c ≡ SKIP
+  → Γ ⊢ c
+  → Γ ⊢ₛ s
+  → ¬ c ≡ SKIP
 -- allora
-    → ∃[ c′ ] (∃[ s′ ] ( ⦅ c , s ⦆→⦅ c′ , s′ ⦆ ))
-             -- tipo abitato da una tripla x , y , z dove
-             -- x testimone di c′, y testimone di s′,
-             -- z : ⦅ c , s ⦆→⦅ x , y ⦆
+  → ∃[ c′ ] (∃[ s′ ] ( ⦅ c , s ⦆→⦅ c′ , s′ ⦆ ))
+            -- tipo abitato da una tripla x , y , z dove
+            -- x testimone di c′, y testimone di s′,
+            -- z : ⦅ c , s ⦆→⦅ x , y ⦆
              
 ------------------------------------------------------------------------
 -- Esercizio: dimostrare il teorema progress
@@ -564,6 +516,25 @@ postulate
 -- Sugg. usare contradiction, progress-aval, either-skip e progress-bval 
 ------------------------------------------------------------------------
 
+progress TSkip Γ⊢ₛs ¬c≡SKIP = 
+  contradiction refl ¬c≡SKIP
+progress {_} {.(x ::= a)} {s} (TLoc {_} {a} {x} Γ⊢ₐa∷Γx) Γ⊢ₛs ¬c≡SKIP with (progress-aval Γ⊢ₐa∷Γx Γ⊢ₛs)
+... | v , taval_asv  = 
+  SKIP , s [ x ::= v ] , Loc taval_asv
+progress {_} {.(SKIP :: c₂)} {s} (TSeq {_} {SKIP} {c₂} Γ⊢c₁ Γ⊢c₂) Γ⊢ₛs ¬c≡SKIP = 
+  c₂ , s , Comp₁
+progress {_} {_}             {s} (TSeq {_} {c₁}   {c₂} Γ⊢c₁ Γ⊢c₂) Γ⊢ₛs ¬c≡SKIP with either-skip c₁
+progress {_} {.(SKIP :: c₂)} {s} (TSeq {_} {SKIP} {c₂} Γ⊢c₁ Γ⊢c₂) Γ⊢ₛs ¬c≡SKIP    | inj₁ c₁≡SKIP = c₂ , s , Comp₁
+progress {_} {.(c₁ :: c₂)}   {s} (TSeq {_} {c₁}   {c₂} Γ⊢c₁ Γ⊢c₂) Γ⊢ₛs ¬c≡SKIP    | inj₂ ¬c₁≡SKIP with (progress Γ⊢c₁ Γ⊢ₛs ¬c₁≡SKIP)
+... | c₁′ , s′ , ⦅c₁,s⦆→⦅c₁′,s′⦆ = 
+  c₁′ :: c₂ , s′ , Comp₂ ⦅c₁,s⦆→⦅c₁′,s′⦆
+progress {_} {.(IF b THEN c₁ ELSE c₂)} {s} (TIf {_} {b} {c₁} {c₂} Γ⊢₆b Γ⊢c Γ⊢c₁) Γ⊢ₛs ¬c≡SKIP with (progress-bval Γ⊢₆b Γ⊢ₛs)
+... | true , tbval_bstrue   = 
+  c₁ , s , IfTrue tbval_bstrue
+... | false , tbval_bsfalse = 
+  c₂ , s , IfFalse tbval_bsfalse
+progress {_} {.(WHILE b DO c)} {s} (TWhile {_} {b} {c} x Γ⊢c) Γ⊢ₛs ¬c≡SKIP = 
+  (IF b THEN (c :: (WHILE b DO c)) ELSE SKIP) , s , While
 
 ----------------------------------------------------
 -- Teorema di cottettezza (Nipkow 9.8)
