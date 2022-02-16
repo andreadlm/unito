@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+    Author: Andrea Delmastro
+    Website description: online sport publication. Users can read, comment, like articles and create custom lists of
+                         favourites and saved for later articles. Editor users can create, delete articles and moderate
+                         comments.
+    Page description: login page of the website. This page allows users to login or create a new account.
+    --->
+    <meta charset="UTF-8">
+    <title>Vuvuzela | Log in</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/login.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../script/login.js" type="text/javascript"></script>
+</head>
+<body>
+<section id="main">
+    <section id="content">
+        <div id="title">
+            <h1>Vuvuzela</h1>
+            <h4>Més que una revista</h4>
+        </div>
+        <form>
+            <h2 id="access-title">Log in</h2>
+            <label id="username-label" for="username">Username:</label>
+            <input id="username" class="input-field-text" type="text" autocomplete="off" required>
+            <label id="password-label" for="password">Password:</label>
+            <input id="password" class="input-field-text" type="password" autocomplete="off" required>
+            <label id="editor-label"><input id="editor" type="checkbox">I'm an editor</label>
+            <button id="access-action-button" class="input-field-button-text" type="submit">Log in</button>
+            <div id="switch-text-wrapper">
+                <span id="switch-text">Don't have an account yet?</span>
+                <button id="switch-button" class="input-field-button-text" type="button">Create new account</button>
+            </div>
+            <p id="message"></p>
+        </form>
+    </section>
+</section>
+</body>
+</html>

@@ -1,0 +1,10 @@
+:root {
+    --error-color: #fda4a4;
+    --background-color: #f5eddd;
+    --background-color-darker: #efe3ca;
+    --first-color: #212120;
+    --accent-color-1: yellow;
+    --accent-color-2: green;
+    --accent-color-3: darkred;
+    --disabled-color: grey;
+}

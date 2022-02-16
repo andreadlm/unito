@@ -1,0 +1,95 @@
+form {
+    grid-area: form;
+    display: grid;
+    grid-template-areas:
+        'title title'
+        'title-label title-input'
+        'description-label description-input'
+        'text-label text-input'
+        'img-label img-input'
+        'category-label category-input'
+        'tags-label tags-input'
+        'upload-button upload-button';
+    align-items: center;
+    justify-items: stretch;
+    gap: 1em;
+    width: 60%;
+    margin: 2vh auto;
+    grid-template-columns: 1fr 5fr;
+}
+
+form > h2 {
+    margin: 0;
+}
+
+#form-title {
+    grid-area: title;
+    justify-self: stretch;
+    display: flex;
+    align-items: center;
+}
+
+#form-title > h2 {
+    flex-grow: 1;
+    text-align: center;
+}
+
+#title-label {
+    grid-area: title-label;
+}
+
+#title {
+    grid-area: title-input
+}
+
+#description-label {
+    grid-area: description-label;
+}
+
+#description {
+    grid-area: description-input;
+}
+
+#text-label {
+    grid-area: text-label;
+}
+
+#text {
+    grid-area: text-input;
+    display: block;
+}
+
+#img-label {
+    grid-area: img-label;
+}
+
+#img {
+    grid-area: img-input;
+}
+
+#category-label {
+    grid-area: category-label;
+}
+
+#category {
+    grid-area: category-input;
+}
+
+#tags-label {
+    grid-area: tags-label;
+}
+
+#tags {
+    grid-area: tags-input;
+}
+
+#upload-button {
+    grid-area: upload-button;
+    justify-self: right;
+    padding: 1rem;
+}
+
+.error-message {
+    width: 50%;
+    margin: 0.5rem auto;
+}

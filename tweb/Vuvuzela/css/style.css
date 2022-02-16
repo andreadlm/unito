@@ -1,0 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,800;1,400&family=Yeseva+One&display=swap');
+@import 'colors.css';
+
+* {
+    font-family: 'Playfair Display', serif;
+}
+
+body {
+    margin: 1vh 0 0 0;
+    background-color: green;
+    opacity: 1;
+    background-image: linear-gradient(to right, var(--accent-color-1), var(--accent-color-1) 20px, var(--accent-color-2) 20px, var(--accent-color-2));
+    background-size: 40px 100%;
+}
+
+#main {
+    background-color: var(--background-color);
+    min-height: 99vh;
+    display: grid;
+    grid-template-areas:
+        'header'
+        'content'
+        'footer';
+    grid-template-rows: auto 1fr auto;
+}
+
+header {
+    border-bottom: 1px solid gray;
+    text-align: center;
+    padding: 1.5rem;
+    grid-area: header;
+}
+
+header > h1 {
+    font-family: 'Yeseva One', cursive;
+    font-size: 4rem;
+    margin: 0;
+}
+
+header > h4 {
+    font-size: 1rem;
+    margin: 0;
+}
+
+footer {
+    background-color: var(--first-color);
+    color: var(--background-color);
+    min-height: 20vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 2em;
+    grid-area: footer;
+}
+
+footer > h2 {
+    font-family: 'Yeseva One', cursive;
+    font-size: 4ch;
+    margin: 0;
+}
+
+footer > p {
+    max-width: 60ch;
+}
+
+.content {
+    grid-area: content;
+    align-self: stretch;
+}
+
+.input-field-text {
+    border: 1px solid var(--first-color);
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.input-field-text-error {
+    background-color: var(--error-color);
+}
+
+Button {
+    cursor: pointer;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.button-fill,
+.button-accent {
+    border-radius: 2px;
+    padding: 0.2em 0.4em;
+}
+
+.button-fill {
+    color: white;
+    border: 0;
+    background-color: var(--first-color);
+}
+
+.button-fill:disabled {
+    background-color: transparent;
+    color: var(--first-color);
+    border: 1px solid var(--first-color);
+    cursor: auto;
+}
+
+.button-accent {
+    background-color: var(--accent-color-2);
+    color: white;
+    border: 0;
+}
+
+.button-underline {
+    background-color: transparent;
+    border: 0;
+    text-decoration: underline;
+}
+
+a:link, a:visited,  a:hover, a:active {
+    color: black;
+    text-decoration: none;
+}
+
+.error-message {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-family: monospace;
+    background-color: var(--error-color);
+    color: white;
+    border-radius: 5px;
+    padding: 0.5rem;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.error-message > p{
+    font-family: monospace;
+    margin: 0;
+}
+
+.error-message > button {
+    font-family: monospace;
+    background-color: transparent;
+    color: white;
+    border: 0;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    border-left: 3px solid var(--first-color);
+    border-radius: 0 4px 4px 0;
+    overflow: hidden;
+}
+
+.comment-highlighted {
+    background-color: var(--background-color-darker);
+}
+
+.comment-header {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.comment-author {
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.comment-date {
+    font-family: sans-serif;
+    font-size: 0.75rem;
+}
+
+.comment-text {
+    font-family: sans-serif;
+    font-size: 0.9rem;
+}
+
+#list-end {
+    text-align: center;
+    display: none;
+}
+
+#list-end > img {
+    height: 9vh;
+}
+
+#list-end > p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+#load-more-button {
+    border: 0;
+    font-size: 1rem;
+    color: black;
+    display: block;
+    width: 100%;
+    padding: 0.3rem;
+    background-color: var(--background-color-darker);
+}

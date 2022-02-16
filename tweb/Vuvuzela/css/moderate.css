@@ -1,0 +1,35 @@
+#moderate-title,
+#comments-list,
+#load-more-button {
+    width: 50%;
+}
+
+#moderate-title {
+    margin: auto;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+#moderate-title > h2 {
+    text-align: center;
+    flex-grow: 1;
+}
+
+#comments-list {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+}
+
+.comment-moderate-buttons {
+    display: flex;
+    justify-content: end;
+    gap: 1rem;
+}
+
+#load-more-button, #list-end {
+    margin: 1rem auto;
+}

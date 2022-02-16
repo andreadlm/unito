@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,800;1,400&family=Yeseva+One&display=swap');
+
+#content {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    grid-area: content;
+}
+
+@media (max-width: 130ch) {
+    #content {
+        column-gap: 4em;
+    }
+}
+
+#title > h1 {
+    font-family: 'Playfair Display', cursive;
+    font-size: 8ch;
+    margin: 0;
+}
+
+#title > h4 {
+    text-align: center;
+    margin: 0;
+}
+
+form {
+    display: grid;
+    grid-template-areas:
+        'title title'
+        'username-label username-input'
+        'password-label password-input'
+        'editor-check editor-check'
+        'action-button action-button'
+        'alternative alternative'
+        'message message';
+    align-items: center;
+    justify-items: center;
+    gap: 1em;
+    width: 40ch; /* TODO: corretto? */
+}
+
+@media (min-width: 130ch) {
+    form {
+        padding-left: 10ch;
+        margin-left: 10ch;
+        border-left: 1px solid black;
+    }
+}
+
+#access-title {
+    grid-area: title;
+    font-size: 4ch;
+    margin: 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+#username-label {
+    grid-area: username-label;
+    justify-self: end;
+}
+
+#username {
+    grid-area: username-input;
+    justify-self: start;
+}
+
+#password-label {
+    grid-area: password-label;
+    justify-self: end;
+}
+
+#password {
+    grid-area: password-input;
+    justify-self: start;
+}
+
+#editor-label {
+    grid-area: editor-check;
+}
+
+#access-action-button {
+    grid-area: action-button;
+}
+
+#switch-text-wrapper {
+    grid-area: alternative;
+}
+
+#message {
+    display: none;
+    grid-area: message;
+}
+
+Button {
+    cursor: pointer;
+}
+
+.input-field-button-text {
+    background-color: transparent;
+    border: 0;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#access-action-button {
+    font-size: 2ch;
+}
+
+
+
