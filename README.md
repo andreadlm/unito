@@ -7,3 +7,5 @@ Interesting projects:
 * [lft compiler](https://github.com/andreadlm/unito/tree/master/lft/Lab/Esercizi/Es05_traduttore/Es05_02): a simple compiler for a purpose-built language that translates in Jasmin assembly format, part of the formal languages and compilers course
 
 * [COVID platform](https://github.com/andreadlm/unito/tree/master/bd/Progetto): database design for a national COVID vaccination campaign platform, part of the databases course
+
+* [Vuvuzela](https://github.com/andreadlm/unito/tree/master/tweb/Vuvuzela): sport news website, part of the web technologies course
